@@ -1,83 +1,57 @@
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
-import { useGLTF, Float, Text, Html, OrbitControls } from "@react-three/drei";
-import { useControls } from "leva";
-import { Perf } from "r3f-perf";
+import { useTexture, useGLTF, OrbitControls, Center } from "@react-three/drei";
 
 export default function Experience() {
-  // Reference for cube
-  const cubeRef = useRef();
+  // Used to get info on node names
+  // const model = useGLTF("./model/testing.glb");
+  // console.log(model);
 
-  // Load model
-  const model = useGLTF("./hamburger.glb");
+  // Destructure model load
+  const { nodes } = useGLTF("./model/testing.glb");
 
-  // Leva control
-  const { position } = useControls({
-    position: { value: -2, min: -4, max: 4, step: 0.01 },
-  });
+  // // Loads texture
+  const bakedTexture = useTexture("./model/testing.jpg");
+  bakedTexture.flipY = false;
 
-  // Tick function for timer/delta (movement in scene)
-  useFrame((state, delta) => {
-    // Rotation of cube. Using delta to have same rotation speed no matter what framerate
-    cubeRef.current.rotation.y += delta;
-  });
+  const nodeNames = [];
+
+  // Looping through the nodes property
+  for (const nodeName in nodes) {
+    // If nodes has a property match set true.
+    if (nodes.hasOwnProperty(nodeName)) {
+      // Set current node with nodes[name]
+      const node = nodes[nodeName];
+
+      // If node is a mesh and is not baked (add to map)
+      if (node.isMesh && nodeName !== "baked") {
+        // Store the node name in the array
+        nodeNames.push(nodeName);
+      }
+    }
+  }
+
+  // console.log(nodeNames);
 
   return (
     <>
-      {/* From perf */}
-      <Perf position={"top-left"} />
+      <color args={["#030202"]} attach={"background"} />
 
-      {/* From drei default damping*/}
-      <OrbitControls />
+      <OrbitControls makeDefault />
 
-      {/* Lights */}
-      <directionalLight position={[1, 2, 3]} intensity={1.5} />
-      <ambientLight intensity={0.5} />
-
-      <group>
-        {/* Sphere */}
-        <mesh position-x={position}>
-          <sphereGeometry />
-          <meshStandardMaterial color={"orange"} />
+      <Center>
+        {/* Load Scene */}
+        <mesh geometry={nodes.baked.geometry}>
+          <meshBasicMaterial map={bakedTexture} />
         </mesh>
 
-        {/* Cube */}
-        <mesh
-          ref={cubeRef}
-          rotation-y={Math.PI * 0.25}
-          position-x={2}
-          scale={1.5}
-        >
-          <boxGeometry scale={1.5} />
-          <meshStandardMaterial color={"mediumpurple"} />
-        </mesh>
-      </group>
+        {/* Load all emissions */}
+        {nodeNames.map((nodeName, index) => {
+          // Dynamically access the geometry using the nodeName
+          const geometry = nodes[nodeName].geometry;
+          const position = nodes[nodeName].position;
 
-      {/* Plane */}
-      <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
-        <planeGeometry />
-        <meshStandardMaterial color={"greenyellow"} />
-      </mesh>
-
-      {/* HTML text can be attached to meshes */}
-      {/* <Html>test</Html> */}
-
-      {/* Text bring in personal font if needed use woff font type*/}
-      <Float speed={5} floatIntensity={2}>
-        <Text
-          font=""
-          fontSize={1}
-          color={"salmon"}
-          position-y={2}
-          maxWidth={2}
-          textAlign="center"
-        >
-          Testing R3F
-          <meshNormalMaterial />
-        </Text>
-      </Float>
-
-      <primitive object={model.scene} scale={0.35} position={[0, 0, -3]} />
+          return <mesh key={index} geometry={geometry} position={position} />;
+        })}
+      </Center>
     </>
   );
 }
