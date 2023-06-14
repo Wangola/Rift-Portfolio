@@ -1,9 +1,39 @@
-import { useTexture, useGLTF, OrbitControls, Center } from "@react-three/drei";
+import React from "react";
+import * as THREE from "three";
+import {
+  shaderMaterial,
+  useTexture,
+  useGLTF,
+  OrbitControls,
+  Center,
+} from "@react-three/drei";
 import { useControls } from "leva";
 import { Perf } from "r3f-perf";
 
+// Shader imports
+import { extend, useFrame } from "@react-three/fiber";
+import nexusVertexShader from "./shaders/nexus/vertex.glsl";
+import nexusFragmentShader from "./shaders/nexus/fragment.glsl";
+
+// Animation
+import { useRef } from "react";
+
+// Custom Shaders
+const NexusMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uRotationSpeed: 0.3,
+    uColorStart: new THREE.Color("#2EFFFF"), // light blue
+    uColorEnd: new THREE.Color("#00008B"), // dark blue
+  },
+  nexusVertexShader,
+  nexusFragmentShader
+);
+
+extend({ NexusMaterial });
+
 export default function Experience() {
-  // ----- LOADING INFO -----
+  // ----- LOADING GEO/TEX INFO -----
   // Destructure model load
   const { nodes } = useGLTF("./model/testing.glb");
 
@@ -13,17 +43,26 @@ export default function Experience() {
   const bakedFloor = useTexture("./model/testing.jpg");
   bakedFloor.flipY = false;
 
-  // ----- LOADING INFO -----
+  // ----- LOADING GEO/TEX INFO -----
+
+  // ----- ANIMATION INFO -----
+  const nexusMaterial = useRef();
+
+  // Tick handler
+  useFrame((state, delta) => {
+    nexusMaterial.current.uTime += delta;
+  });
+  // ----- ANIMATION INFO -----
 
   // ----- LEVA/PERF INFO (debug) -----
 
   // Perf Visibility
   const { perfVisible } = useControls({
-    perfVisible: true,
+    perfVisible: false,
   });
 
   // Simple test for crystal movement
-  const { position, color, visible } = useControls("Nexus Crystal", {
+  const { position, visible } = useControls("Nexus Crystal", {
     position: {
       value: {
         x: nodes.nexusCrystal.position.x,
@@ -32,10 +71,8 @@ export default function Experience() {
       step: 0.05,
       joystick: "invertY",
     },
-    color: "#ff0000",
     visible: true,
   });
-  console.log(color);
 
   // ----- LEVA/PERF INFO (debug) -----
 
@@ -62,12 +99,13 @@ export default function Experience() {
           <meshBasicMaterial map={bakedFloor} />
         </mesh>
 
+        {/* Load Nexus Crystal */}
         <mesh
           geometry={nodes.nexusCrystal.geometry}
           position={[position.x, position.y, nodes.nexusCrystal.position.z]}
           visible={visible}
         >
-          <meshBasicMaterial color={color} />
+          <nexusMaterial ref={nexusMaterial} />
         </mesh>
       </Center>
     </>
