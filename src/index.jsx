@@ -13,7 +13,7 @@ const root = createRoot(document.querySelector("#root"));
 root.render(
   <StrictMode>
     <Leva collapsed />
-    <Canvas camera={{ fov: 75, position: [4.5, 1.5, 8] }}>
+    <Canvas camera={{ fov: 75, position: [15.5, 5.5, 15.5] }}>
       <Experience />
     </Canvas>
   </StrictMode>

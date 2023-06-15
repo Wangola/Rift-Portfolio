@@ -2,6 +2,7 @@ precision mediump float;
 
 uniform vec3 uColorStart;
 uniform vec3 uColorEnd;
+uniform vec3 uColorPerlin;
 
 varying vec2 vUv;
 // For some reason uTime uniform was not working so hard to transfer as varying
@@ -116,7 +117,7 @@ void main(){
     finalColor = mix(uColorStart, uColorEnd, strength * .2);
 
     // Perlin noise
-    float perlin = cnoise(vec3(vUv * 10.0, vTime * 0.5));
+    float perlin = cnoise(vec3(vUv * 5.0, vTime * 0.5));
 
     vec3 perlinColor = vec3(0.0, 1.0, 0.0); // Blue color
     finalColor += perlin * perlinColor;
@@ -183,3 +184,24 @@ void main(){
 //     finalColor += perlin;
 
 //     gl_FragColor = vec4(finalColor, 1.0);
+
+
+// BEST OPTIONS
+    // // Perlin noise
+    // float perlin = cnoise(vec3(vUv * 10.0, vTime * 0.5));
+
+    // // Adding final color with perlin and given color
+    // finalColor += perlin + uColorPerlin;
+
+    // gl_FragColor = vec4(finalColor, 1.0);
+
+
+
+
+    // Perlin noise
+    // float perlin = cnoise(vec3(vUv * 5.0, vTime * 0.5));
+
+    // vec3 perlinColor = vec3(0.0, 1.0, 0.0); // Blue color
+    // finalColor += perlin * perlinColor;
+
+    // gl_FragColor = vec4(finalColor, 1.0);

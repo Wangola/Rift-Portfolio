@@ -14,6 +14,8 @@ import { Perf } from "r3f-perf";
 import { extend, useFrame } from "@react-three/fiber";
 import nexusVertexShader from "./shaders/nexus/vertex.glsl";
 import nexusFragmentShader from "./shaders/nexus/fragment.glsl";
+import projectPVertexShader from "./shaders/projectPortal/vertex.glsl";
+import projectPFragmentShader from "./shaders/projectPortal/fragment.glsl";
 
 // Animation
 import { useRef } from "react";
@@ -25,12 +27,23 @@ const NexusMaterial = shaderMaterial(
     uRotationSpeed: 0.3,
     uColorStart: new THREE.Color("#2EFFFF"), // light blue
     uColorEnd: new THREE.Color("#00008B"), // dark blue
+    uColorPerlin: new THREE.Color("#0000E7"),
   },
   nexusVertexShader,
   nexusFragmentShader
 );
 
-extend({ NexusMaterial });
+const ProjectPortalMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColorStart: new THREE.Color("#2EFF2E"), // light green
+    uColorEnd: new THREE.Color("#00A300"), // dark green
+  },
+  projectPVertexShader,
+  projectPFragmentShader
+);
+
+extend({ NexusMaterial, ProjectPortalMaterial });
 
 export default function Experience() {
   // ----- LOADING GEO/TEX INFO -----
@@ -47,10 +60,12 @@ export default function Experience() {
 
   // ----- ANIMATION INFO -----
   const nexusMaterial = useRef();
+  const projectPortalMaterial = useRef();
 
   // Tick handler
   useFrame((state, delta) => {
     nexusMaterial.current.uTime += delta;
+    projectPortalMaterial.current.uTime += delta;
   });
   // ----- ANIMATION INFO -----
 
@@ -106,6 +121,20 @@ export default function Experience() {
           visible={visible}
         >
           <nexusMaterial ref={nexusMaterial} />
+        </mesh>
+
+        {/* Load Names */}
+        <mesh
+          geometry={nodes.names.geometry}
+          position={nodes.names.position}
+        ></mesh>
+
+        {/* Load projectPortalEnt */}
+        <mesh
+          geometry={nodes.projectPortalEnt.geometry}
+          position={nodes.projectPortalEnt.position}
+        >
+          <projectPortalMaterial ref={projectPortalMaterial} />
         </mesh>
       </Center>
     </>
