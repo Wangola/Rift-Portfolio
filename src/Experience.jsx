@@ -38,6 +38,7 @@ const ProjectPortalMaterial = shaderMaterial(
     uTime: 0,
     uColorStart: new THREE.Color("#2EFF2E"), // light green
     uColorEnd: new THREE.Color("#00A300"), // dark green
+    uColorPerlin: new THREE.Color("#d00017"), // red to make yellow/orange
   },
   projectPVertexShader,
   projectPFragmentShader

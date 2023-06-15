@@ -2,6 +2,7 @@ precision mediump float;
 
 uniform vec3 uColorStart;
 uniform vec3 uColorEnd;
+uniform vec3 uColorPerlin;
 
 varying vec2 vUv;
 varying float vTime;
@@ -91,9 +92,66 @@ void main(){
     vec3 finalColor;
     finalColor = mix(uColorEnd, uColorStart, strength);
 
-    float perlin = cnoise(vec3(vUv * 5.0, vTime * 0.5));
+    vec2 displacedUV = vUv + cnoise(vec3(vUv * 5.0, vTime * 0.1));
 
-    finalColor += perlin;
+    // Perlin noise
+    float perlin = cnoise(vec3(displacedUV * 5.0, vTime * 0.5));
+    
+    finalColor += perlin * uColorPerlin;
 
     gl_FragColor = vec4(finalColor, 1.0);
 }
+
+
+// BASE case
+// float perlin = cnoise(vec3(vUv * 5.0, vTime * 0.5));
+
+//     finalColor += perlin;
+
+//     gl_FragColor = vec4(finalColor, 1.0);
+
+
+// Sick option
+// vec2 displacedUV = vUv + cnoise(vec3(vUv * 5.0, vTime * 0.1));
+
+//     // Perlin noise
+//     float perlin = cnoise(vec3(displacedUV * 5.0, vTime * 0.5));
+
+//     vec3 perlinColor = vec3(1.0, 0.0, 0.0); // Red color
+//     finalColor += perlin * perlinColor;
+
+//     gl_FragColor = vec4(finalColor, 1.0);
+
+
+// INTERESTING 
+// // Displace the UV
+//     vec2 displacedUV = vUv + cnoise(vec3(vUv * 5.0, vTime * 0.1));
+
+//     // Perlin noise
+//     float perlin = cnoise(vec3(displacedUV * 5.0, vTime * 0.5));
+
+//     // Outer glow
+//     float outerGlow = distance(vUv, vec2(0.5)) * 2.5 - 1.4;
+//     perlin += outerGlow;
+
+//     // vec3 perlinColor = vec3(1.0, 0.0, 0.0); // Blue color
+//     finalColor += perlin;
+
+//     gl_FragColor = vec4(finalColor, 1.0);
+
+// MAYBE BETTER OPTION
+// Displace the UV
+    // vec2 displacedUV = vUv + cnoise(vec3(vUv * 5.0, vTime * 0.1));
+
+    // // Perlin noise
+    // float perlin = cnoise(vec3(displacedUV * 5.0, vTime * 0.5));
+
+    // // Outer glow
+    // float outerGlow = distance(vUv, vec2(0.5)) * 2.5 - 1.4;
+    // outerGlow = clamp(outerGlow, 0.0, 1.0); // Prevent it from contributing to black lines
+    // perlin += outerGlow;
+
+    // // vec3 perlinColor = vec3(1.0, 0.0, 0.0); // Blue color
+    // finalColor += perlin * uColorPerlin;
+
+    // gl_FragColor = vec4(finalColor, 1.0);
