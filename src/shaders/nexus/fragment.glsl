@@ -117,10 +117,10 @@ void main(){
     finalColor = mix(uColorStart, uColorEnd, strength * .2);
 
     // Perlin noise
-    float perlin = cnoise(vec3(vUv * 5.0, vTime * 0.5));
+    float perlin = cnoise(vec3(vUv * 10.0, vTime * 0.5));
 
-    vec3 perlinColor = vec3(0.0, 1.0, 0.0); // Blue color
-    finalColor += perlin * perlinColor;
+    // Adding final color with perlin and given color
+    finalColor += perlin + uColorPerlin;
 
     gl_FragColor = vec4(finalColor, 1.0);
 }
@@ -186,22 +186,10 @@ void main(){
 //     gl_FragColor = vec4(finalColor, 1.0);
 
 
-// BEST OPTIONS
-    // // Perlin noise
-    // float perlin = cnoise(vec3(vUv * 10.0, vTime * 0.5));
+// last addition (added uColorPerlin)
+//    // Perlin noise
+//     float perlin = cnoise(vec3(vUv * 10.0, vTime * 0.5));
+      // Adding final color with perlin and given color.
+//     finalColor += perlin + uColorPerlin;
 
-    // // Adding final color with perlin and given color
-    // finalColor += perlin + uColorPerlin;
-
-    // gl_FragColor = vec4(finalColor, 1.0);
-
-
-
-
-    // Perlin noise
-    // float perlin = cnoise(vec3(vUv * 5.0, vTime * 0.5));
-
-    // vec3 perlinColor = vec3(0.0, 1.0, 0.0); // Blue color
-    // finalColor += perlin * perlinColor;
-
-    // gl_FragColor = vec4(finalColor, 1.0);
+//     gl_FragColor = vec4(finalColor, 1.0);

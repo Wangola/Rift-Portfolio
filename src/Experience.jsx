@@ -14,8 +14,8 @@ import { Perf } from "r3f-perf";
 import { extend, useFrame } from "@react-three/fiber";
 import nexusVertexShader from "./shaders/nexus/vertex.glsl";
 import nexusFragmentShader from "./shaders/nexus/fragment.glsl";
-import projectPVertexShader from "./shaders/projectPortal/vertex.glsl";
-import projectPFragmentShader from "./shaders/projectPortal/fragment.glsl";
+import portalVertexShader from "./shaders/Portal/vertex.glsl";
+import portalFragmentShader from "./shaders/Portal/fragment.glsl";
 
 // Animation
 import { useRef } from "react";
@@ -39,12 +39,45 @@ const ProjectPortalMaterial = shaderMaterial(
     uColorStart: new THREE.Color("#2EFF2E"), // light green
     uColorEnd: new THREE.Color("#00A300"), // dark green
     uColorPerlin: new THREE.Color("#d00017"), // red to make yellow/orange
+    uDisplacedInt: 5.0,
+    uPerlinInt: 5.0,
   },
-  projectPVertexShader,
-  projectPFragmentShader
+  portalVertexShader,
+  portalFragmentShader
 );
 
-extend({ NexusMaterial, ProjectPortalMaterial });
+const GamePortalMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColorStart: new THREE.Color("#FF2E2E"), // light red
+    uColorEnd: new THREE.Color("#A30000"), // dark red
+    uColorPerlin: new THREE.Color("#9D52FF"), // light violet to improve portal brightness
+    uDisplacedInt: 15.0,
+    uPerlinInt: 8.0,
+  },
+  portalVertexShader,
+  portalFragmentShader
+);
+
+const ExpPortalMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColorStart: new THREE.Color("#0E86D4"), // light blue
+    uColorEnd: new THREE.Color("#003060"), // dark blue
+    uColorPerlin: new THREE.Color("#A30000"), // red to remove black outlines #A30000. Or brown for yellowish tint. #964B00
+    uDisplacedInt: 8.0,
+    uPerlinInt: 3.0,
+  },
+  portalVertexShader,
+  portalFragmentShader
+);
+
+extend({
+  NexusMaterial,
+  ProjectPortalMaterial,
+  GamePortalMaterial,
+  ExpPortalMaterial,
+});
 
 export default function Experience() {
   // ----- LOADING GEO/TEX INFO -----
@@ -62,11 +95,15 @@ export default function Experience() {
   // ----- ANIMATION INFO -----
   const nexusMaterial = useRef();
   const projectPortalMaterial = useRef();
+  const gamePortalMaterial = useRef();
+  const expPortalMaterial = useRef();
 
   // Tick handler
   useFrame((state, delta) => {
     nexusMaterial.current.uTime += delta;
     projectPortalMaterial.current.uTime += delta;
+    gamePortalMaterial.current.uTime += delta;
+    expPortalMaterial.current.uTime += delta;
   });
   // ----- ANIMATION INFO -----
 
@@ -136,6 +173,22 @@ export default function Experience() {
           position={nodes.projectPortalEnt.position}
         >
           <projectPortalMaterial ref={projectPortalMaterial} />
+        </mesh>
+
+        {/* Load gamePortalEnt */}
+        <mesh
+          geometry={nodes.gamePortalEnt.geometry}
+          position={nodes.gamePortalEnt.position}
+        >
+          <gamePortalMaterial ref={gamePortalMaterial} />
+        </mesh>
+
+        {/* Load expPortalEnt */}
+        <mesh
+          geometry={nodes.expPortalEnt.geometry}
+          position={nodes.expPortalEnt.position}
+        >
+          <expPortalMaterial ref={expPortalMaterial} />
         </mesh>
       </Center>
     </>

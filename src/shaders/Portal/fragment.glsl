@@ -3,6 +3,8 @@ precision mediump float;
 uniform vec3 uColorStart;
 uniform vec3 uColorEnd;
 uniform vec3 uColorPerlin;
+uniform float uDisplacedInt;
+uniform float uPerlinInt;
 
 varying vec2 vUv;
 varying float vTime;
@@ -92,10 +94,10 @@ void main(){
     vec3 finalColor;
     finalColor = mix(uColorEnd, uColorStart, strength);
 
-    vec2 displacedUV = vUv + cnoise(vec3(vUv * 5.0, vTime * 0.1));
+    vec2 displacedUV = vUv + cnoise(vec3(vUv * uDisplacedInt, vTime * 0.1));
 
     // Perlin noise
-    float perlin = cnoise(vec3(displacedUV * 5.0, vTime * 0.5));
+    float perlin = cnoise(vec3(displacedUV * uPerlinInt, vTime * 0.5));
     
     finalColor += perlin * uColorPerlin;
 
