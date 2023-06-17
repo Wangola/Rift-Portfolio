@@ -5,7 +5,7 @@ const isCodeSandbox =
   "SANDBOX_URL" in process.env || "CODESANDBOX_HOST" in process.env;
 
 export default {
-  plugins: [react()],
+  plugins: [react(), glsl()],
   root: "src/",
   publicDir: "../public/",
   base: "./",
@@ -18,5 +18,4 @@ export default {
     emptyOutDir: true,
     sourcemap: true,
   },
-  plugins: [glsl()],
 };

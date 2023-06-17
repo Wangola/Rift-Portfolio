@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import "./style.css";
 import { createRoot } from "react-dom/client";
 // Custom imports
-import Experience from "./Experience";
+import Experience from "./components/Experience";
 import { Leva } from "leva";
 import { StrictMode } from "react";
 
