@@ -13,6 +13,7 @@ import {
   ExpPortalMaterial,
   CandleMaterial,
   CrystalBallMaterial,
+  StaffGemMaterial,
 } from "./Shaders";
 
 import Controls from "./DebugControls";
@@ -26,6 +27,7 @@ extend({
   ExpPortalMaterial,
   CandleMaterial,
   CrystalBallMaterial,
+  StaffGemMaterial,
 });
 
 export default function Experience() {
@@ -51,6 +53,7 @@ export default function Experience() {
   const expPortalMaterial = useRef();
   const candleMaterial = useRef();
   const crystalBallMaterial = useRef();
+  const staffGemMaterial = useRef();
 
   // Tick handler
   useFrame((state, delta) => {
@@ -60,6 +63,7 @@ export default function Experience() {
     expPortalMaterial.current.uTime += delta;
     candleMaterial.current.uTime += delta;
     crystalBallMaterial.current.uTime += delta;
+    staffGemMaterial.current.uTime += delta;
   });
   // ----- ANIMATION INFO -----
 
@@ -120,10 +124,17 @@ export default function Experience() {
     candleMaterial.current.uColorEnd.set(controls.candleColorEnd);
   }, [controls.candleColorStart, controls.candleColorEnd]);
 
+  // Update crystalBall property's with Leva control changes
   React.useEffect(() => {
     crystalBallMaterial.current.uColorStart.set(controls.crystalColorStart);
     crystalBallMaterial.current.uColorEnd.set(controls.crystalColorEnd);
   }, [controls.crystalColorStart, controls.crystalColorEnd]);
+
+  // Update staffGem property's with Leva control changes
+  React.useEffect(() => {
+    staffGemMaterial.current.uColorStart.set(controls.staffColorStart);
+    staffGemMaterial.current.uColorEnd.set(controls.staffColorEnd);
+  }, [controls.staffColorStart, controls.staffColorEnd]);
   // ----- USEEFFECT UPDATES -----
 
   return (
@@ -198,6 +209,13 @@ export default function Experience() {
           position={nodes.crystalBall.position}
         >
           <crystalBallMaterial ref={crystalBallMaterial} />
+        </mesh>
+
+        <mesh
+          geometry={nodes.staffGem.geometry}
+          position={nodes.staffGem.position}
+        >
+          <staffGemMaterial ref={staffGemMaterial} />
         </mesh>
       </Center>
     </>

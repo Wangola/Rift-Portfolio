@@ -10,6 +10,8 @@ import candleVertexShader from "../shaders/candleFire/vertex.glsl";
 import candleFragmentShader from "../shaders/candleFire/fragment.glsl";
 import crystalVertexShader from "../shaders/crystalBall/vertex.glsl";
 import crystalFragmentShader from "../shaders/crystalBall/fragment.glsl";
+import staffVertexShader from "../shaders/staffGem/vertex.glsl";
+import staffFragmentShader from "../shaders/staffGem/fragment.glsl";
 
 // Custom Shaders
 const NexusMaterial = shaderMaterial(
@@ -83,6 +85,16 @@ const CrystalBallMaterial = shaderMaterial(
   crystalFragmentShader
 );
 
+const StaffGemMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColorStart: new THREE.Color(),
+    uColorEnd: new THREE.Color(),
+  },
+  staffVertexShader,
+  staffFragmentShader
+);
+
 // Exporting shader materials
 export {
   NexusMaterial,
@@ -91,4 +103,5 @@ export {
   ExpPortalMaterial,
   CandleMaterial,
   CrystalBallMaterial,
+  StaffGemMaterial,
 };

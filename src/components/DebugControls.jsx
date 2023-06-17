@@ -104,6 +104,16 @@ export default function DebugControls() {
     { collapsed: true }
   );
 
+  // Staff Gem
+  const { staffColorStart, staffColorEnd } = useControls(
+    "Staff Gem",
+    {
+      staffColorStart: "#63abf8",
+      staffColorEnd: "#e7faff",
+    },
+    { collapsed: true }
+  );
+
   // ----- LEVA/PERF INFO (debug) -----
 
   // Return all the values
@@ -130,5 +140,7 @@ export default function DebugControls() {
     candleColorEnd,
     crystalColorStart,
     crystalColorEnd,
+    staffColorStart,
+    staffColorEnd,
   };
 }
