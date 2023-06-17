@@ -1,89 +1,24 @@
-import React from "react";
-import * as THREE from "three";
-import {
-  shaderMaterial,
-  useTexture,
-  useGLTF,
-  OrbitControls,
-  Center,
-} from "@react-three/drei";
-import { useControls } from "leva";
+import React, { useRef } from "react";
+import { useTexture, useGLTF, OrbitControls, Center } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 
-// Shader import
+// Shader support imports
 import { extend, useFrame } from "@react-three/fiber";
-import nexusVertexShader from "../shaders/nexus/vertex.glsl";
-import nexusFragmentShader from "../shaders/nexus/fragment.glsl";
-import portalVertexShader from "../shaders/portal/vertex.glsl";
-import portalFragmentShader from "../shaders/portal/fragment.glsl";
-import candleVertexShader from "../shaders/candleFire/vertex.glsl";
-import candleFragmentShader from "../shaders/candleFire/fragment.glsl";
 
-// Animation
-import { useRef } from "react";
+// ----- Component import -----
+import {
+  NexusMaterial,
+  ProjectPortalMaterial,
+  GamePortalMaterial,
+  ExpPortalMaterial,
+  CandleMaterial,
+} from "./Shaders";
 
-// Custom Shaders
-const NexusMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uRotationSpeed: 0.3,
-    uColorStart: new THREE.Color("#2EFFFF"), // light blue
-    uColorEnd: new THREE.Color("#00008B"), // dark blue
-    uColorPerlin: new THREE.Color("#0000E7"),
-  },
-  nexusVertexShader,
-  nexusFragmentShader
-);
+import Controls from "./DebugControls";
 
-const ProjectPortalMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uColorStart: new THREE.Color(), // light green
-    uColorEnd: new THREE.Color(), // dark green
-    uColorPerlin: new THREE.Color(), // red to make yellow/orange
-    uDisplacedInt: 0.0,
-    uPerlinInt: 0.0,
-  },
-  portalVertexShader,
-  portalFragmentShader
-);
+// ----- Component import -----
 
-const GamePortalMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uColorStart: new THREE.Color(), // light red
-    uColorEnd: new THREE.Color(), // dark red
-    uColorPerlin: new THREE.Color(), // light violet to improve portal brightness
-    uDisplacedInt: 0.0,
-    uPerlinInt: 0.0,
-  },
-  portalVertexShader,
-  portalFragmentShader
-);
-
-const ExpPortalMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uColorStart: new THREE.Color(), // light blue #0E86D4
-    uColorEnd: new THREE.Color(), // dark blue #003060
-    uColorPerlin: new THREE.Color(), // red to remove black outlines #A30000. Or brown for yellowish tint. #964B00 #A30000
-    uDisplacedInt: 0.0,
-    uPerlinInt: 0.0,
-  },
-  portalVertexShader,
-  portalFragmentShader
-);
-
-const CandleMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uColorStart: new THREE.Color(),
-    uColorEnd: new THREE.Color(),
-  },
-  candleVertexShader,
-  candleFragmentShader
-);
-
+// Extend is needed for material usage (Shaders.jsx utalizes shaderMaterial)
 extend({
   NexusMaterial,
   ProjectPortalMaterial,
@@ -96,6 +31,9 @@ export default function Experience() {
   // ----- LOADING GEO/TEX INFO -----
   // Destructure model load
   const { nodes } = useGLTF("./model/testing.glb");
+
+  // Initializing Control Function (Any leva value needed will begin with controls.)
+  const controls = Controls();
 
   // // Loads texture
   const bakedTexture = useTexture("./model/testingBaked.jpg");
@@ -122,153 +60,62 @@ export default function Experience() {
   });
   // ----- ANIMATION INFO -----
 
-  // ----- LEVA/PERF INFO (debug) -----
-
-  // Perf Visibility
-  const { perfVisible } = useControls({
-    perfVisible: false,
-  });
-
-  // Simple test for crystal movement
-  const { position, visible } = useControls(
-    "Nexus Crystal",
-    {
-      position: {
-        value: {
-          x: nodes.nexusCrystal.position.x,
-          y: nodes.nexusCrystal.position.y,
-        },
-        step: 0.05,
-        joystick: "invertY",
-      },
-      visible: true,
-    },
-    { collapsed: true }
-  );
-
-  // --- Portal color management ---
-  // - Project Portal
-  const {
-    projectColorStart,
-    projectColorEnd,
-    projectColorPerlin,
-    projectDisplacedInt,
-    projectPerlinInt,
-  } = useControls(
-    "Project Portal",
-    {
-      projectColorStart: "#2EFF2E",
-      projectColorEnd: "#00A300",
-      projectColorPerlin: "#d00017",
-      projectDisplacedInt: { value: 5.0, min: 0, max: 25, step: 0.1 },
-      projectPerlinInt: { value: 5.0, min: 0, max: 25, step: 0.1 },
-    },
-    { collapsed: true }
-  );
-
-  // Game Portal
-  const {
-    gameColorStart,
-    gameColorEnd,
-    gameColorPerlin,
-    gameDisplacedInt,
-    gamePerlinInt,
-  } = useControls(
-    "Game Portal",
-    {
-      gameColorStart: "#FF2E2E",
-      gameColorEnd: "#A30000",
-      gameColorPerlin: "#9D52FF",
-      gameDisplacedInt: { value: 15.0, min: 0, max: 25, step: 0.1 },
-      gamePerlinInt: { value: 8.0, min: 0, max: 25, step: 0.1 },
-    },
-    { collapsed: true }
-  );
-
-  // Experience Portal
-  const {
-    expColorStart,
-    expColorEnd,
-    expColorPerlin,
-    expDisplacedInt,
-    expPerlinInt,
-  } = useControls(
-    "Experience Portal",
-    {
-      expColorStart: "#6bb8eb",
-      expColorEnd: "#376796",
-      expColorPerlin: "#A30000",
-      expDisplacedInt: { value: 8.0, min: 0, max: 25, step: 0.1 },
-      expPerlinInt: { value: 3.0, min: 0, max: 25, step: 0.1 },
-    },
-    { collapsed: true }
-  );
-  // --- Portal color management ---
-
-  // Candle Fire
-  const { candleColorStart, candleColorEnd } = useControls(
-    "Candle Fire",
-    {
-      candleColorStart: "#FFBF00",
-      candleColorEnd: "#FFCC00",
-    },
-    { collapsed: true }
-  );
-
-  // ----- LEVA/PERF INFO (debug) -----
-
   // ----- USEEFFECT UPDATES -----
   // Update projectPortal property's with Leva control changes
   React.useEffect(() => {
-    projectPortalMaterial.current.uColorStart.set(projectColorStart);
-    projectPortalMaterial.current.uColorEnd.set(projectColorEnd);
-    projectPortalMaterial.current.uColorPerlin.set(projectColorPerlin);
+    projectPortalMaterial.current.uColorStart.set(controls.projectColorStart);
+    projectPortalMaterial.current.uColorEnd.set(controls.projectColorEnd);
+    projectPortalMaterial.current.uColorPerlin.set(controls.projectColorPerlin);
     projectPortalMaterial.current.uniforms.uDisplacedInt.value =
-      projectDisplacedInt;
-    projectPortalMaterial.current.uniforms.uPerlinInt.value = projectPerlinInt;
+      controls.projectDisplacedInt;
+    projectPortalMaterial.current.uniforms.uPerlinInt.value =
+      controls.projectPerlinInt;
   }, [
-    projectColorStart,
-    projectColorEnd,
-    projectColorPerlin,
-    projectDisplacedInt,
-    projectPerlinInt,
+    controls.projectColorStart,
+    controls.projectColorEnd,
+    controls.projectColorPerlin,
+    controls.projectDisplacedInt,
+    controls.projectPerlinInt,
   ]);
 
   // Update gamesPortal property's with Leva control changes.
   React.useEffect(() => {
-    gamePortalMaterial.current.uColorStart.set(gameColorStart);
-    gamePortalMaterial.current.uColorEnd.set(gameColorEnd);
-    gamePortalMaterial.current.uColorPerlin.set(gameColorPerlin);
-    gamePortalMaterial.current.uniforms.uDisplacedInt.value = gameDisplacedInt;
-    gamePortalMaterial.current.uniforms.uPerlinInt.value = gamePerlinInt;
+    gamePortalMaterial.current.uColorStart.set(controls.gameColorStart);
+    gamePortalMaterial.current.uColorEnd.set(controls.gameColorEnd);
+    gamePortalMaterial.current.uColorPerlin.set(controls.gameColorPerlin);
+    gamePortalMaterial.current.uniforms.uDisplacedInt.value =
+      controls.gameDisplacedInt;
+    gamePortalMaterial.current.uniforms.uPerlinInt.value =
+      controls.gamePerlinInt;
   }, [
-    gameColorStart,
-    gameColorEnd,
-    gameColorPerlin,
-    gameDisplacedInt,
-    gamePerlinInt,
+    controls.gameColorStart,
+    controls.gameColorEnd,
+    controls.gameColorPerlin,
+    controls.gameDisplacedInt,
+    controls.gamePerlinInt,
   ]);
 
   // Update expPortal property's with Leva control changes.
   React.useEffect(() => {
-    expPortalMaterial.current.uColorStart.set(expColorStart);
-    expPortalMaterial.current.uColorEnd.set(expColorEnd);
-    expPortalMaterial.current.uColorPerlin.set(expColorPerlin);
-    expPortalMaterial.current.uniforms.uDisplacedInt.value = expDisplacedInt;
-    expPortalMaterial.current.uniforms.uPerlinInt.value = expPerlinInt;
+    expPortalMaterial.current.uColorStart.set(controls.expColorStart);
+    expPortalMaterial.current.uColorEnd.set(controls.expColorEnd);
+    expPortalMaterial.current.uColorPerlin.set(controls.expColorPerlin);
+    expPortalMaterial.current.uniforms.uDisplacedInt.value =
+      controls.expDisplacedInt;
+    expPortalMaterial.current.uniforms.uPerlinInt.value = controls.expPerlinInt;
   }, [
-    expColorStart,
-    expColorEnd,
-    expColorPerlin,
-    expDisplacedInt,
-    expPerlinInt,
+    controls.expColorStart,
+    controls.expColorEnd,
+    controls.expColorPerlin,
+    controls.expDisplacedInt,
+    controls.expPerlinInt,
   ]);
 
   // Update candleFire property's with Leva control changes
   React.useEffect(() => {
-    candleMaterial.current.uColorStart.set(candleColorStart);
-    candleMaterial.current.uColorEnd.set(candleColorEnd);
-  }, [candleColorStart, candleColorEnd]);
+    candleMaterial.current.uColorStart.set(controls.candleColorStart);
+    candleMaterial.current.uColorEnd.set(controls.candleColorEnd);
+  }, [controls.candleColorStart, controls.candleColorEnd]);
   // ----- USEEFFECT UPDATES -----
 
   return (
@@ -276,7 +123,7 @@ export default function Experience() {
       <color args={["#030202"]} attach={"background"} />
 
       {/* Inject perf */}
-      {perfVisible ? <Perf position="top-left" /> : null}
+      {controls.perfVisible ? <Perf position="top-left" /> : null}
 
       <OrbitControls makeDefault />
 
@@ -297,8 +144,12 @@ export default function Experience() {
         {/* Load Nexus Crystal */}
         <mesh
           geometry={nodes.nexusCrystal.geometry}
-          position={[position.x, position.y, nodes.nexusCrystal.position.z]}
-          visible={visible}
+          position={[
+            controls.position.x,
+            controls.position.y,
+            nodes.nexusCrystal.position.z,
+          ]}
+          visible={controls.visible}
         >
           <nexusMaterial ref={nexusMaterial} />
         </mesh>
