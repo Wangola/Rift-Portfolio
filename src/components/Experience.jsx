@@ -12,19 +12,20 @@ import {
   GamePortalMaterial,
   ExpPortalMaterial,
   CandleMaterial,
+  CrystalBallMaterial,
 } from "./Shaders";
 
 import Controls from "./DebugControls";
-
 // ----- Component import -----
 
-// Extend is needed for material usage (Shaders.jsx utalizes shaderMaterial)
+// Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
 extend({
   NexusMaterial,
   ProjectPortalMaterial,
   GamePortalMaterial,
   ExpPortalMaterial,
   CandleMaterial,
+  CrystalBallMaterial,
 });
 
 export default function Experience() {
@@ -49,6 +50,7 @@ export default function Experience() {
   const gamePortalMaterial = useRef();
   const expPortalMaterial = useRef();
   const candleMaterial = useRef();
+  const crystalBallMaterial = useRef();
 
   // Tick handler
   useFrame((state, delta) => {
@@ -57,6 +59,7 @@ export default function Experience() {
     gamePortalMaterial.current.uTime += delta;
     expPortalMaterial.current.uTime += delta;
     candleMaterial.current.uTime += delta;
+    crystalBallMaterial.current.uTime += delta;
   });
   // ----- ANIMATION INFO -----
 
@@ -116,6 +119,11 @@ export default function Experience() {
     candleMaterial.current.uColorStart.set(controls.candleColorStart);
     candleMaterial.current.uColorEnd.set(controls.candleColorEnd);
   }, [controls.candleColorStart, controls.candleColorEnd]);
+
+  React.useEffect(() => {
+    crystalBallMaterial.current.uColorStart.set(controls.crystalColorStart);
+    crystalBallMaterial.current.uColorEnd.set(controls.crystalColorEnd);
+  }, [controls.crystalColorStart, controls.crystalColorEnd]);
   // ----- USEEFFECT UPDATES -----
 
   return (
@@ -132,7 +140,6 @@ export default function Experience() {
         <mesh geometry={nodes.baked.geometry} position={nodes.baked.position}>
           <meshBasicMaterial map={bakedTexture} />
         </mesh>
-
         {/* Load Floor */}
         <mesh
           geometry={nodes.floorBaked.geometry}
@@ -140,7 +147,6 @@ export default function Experience() {
         >
           <meshBasicMaterial map={bakedFloor} />
         </mesh>
-
         {/* Load Nexus Crystal */}
         <mesh
           geometry={nodes.nexusCrystal.geometry}
@@ -153,13 +159,11 @@ export default function Experience() {
         >
           <nexusMaterial ref={nexusMaterial} />
         </mesh>
-
         {/* Load Names */}
         <mesh
           geometry={nodes.names.geometry}
           position={nodes.names.position}
         ></mesh>
-
         {/* Load projectPortalEnt */}
         <mesh
           geometry={nodes.projectPortalEnt.geometry}
@@ -167,7 +171,6 @@ export default function Experience() {
         >
           <projectPortalMaterial ref={projectPortalMaterial} />
         </mesh>
-
         {/* Load gamePortalEnt */}
         <mesh
           geometry={nodes.gamePortalEnt.geometry}
@@ -175,7 +178,6 @@ export default function Experience() {
         >
           <gamePortalMaterial ref={gamePortalMaterial} />
         </mesh>
-
         {/* Load expPortalEnt */}
         <mesh
           geometry={nodes.expPortalEnt.geometry}
@@ -183,13 +185,19 @@ export default function Experience() {
         >
           <expPortalMaterial ref={expPortalMaterial} />
         </mesh>
-
         {/* Load candleFire */}
         <mesh
           geometry={nodes.candleFire.geometry}
           position={nodes.candleFire.position}
         >
           <candleMaterial ref={candleMaterial} />
+        </mesh>
+        {/* Load crystalBall */}
+        <mesh
+          geometry={nodes.crystalBall.geometry}
+          position={nodes.crystalBall.position}
+        >
+          <crystalBallMaterial ref={crystalBallMaterial} />
         </mesh>
       </Center>
     </>

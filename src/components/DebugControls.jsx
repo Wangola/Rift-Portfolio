@@ -94,6 +94,16 @@ export default function DebugControls() {
     { collapsed: true }
   );
 
+  // Crystal ball
+  const { crystalColorStart, crystalColorEnd } = useControls(
+    "Crystal Ball",
+    {
+      crystalColorStart: "#e8e8e8",
+      crystalColorEnd: "#ffde41",
+    },
+    { collapsed: true }
+  );
+
   // ----- LEVA/PERF INFO (debug) -----
 
   // Return all the values
@@ -118,5 +128,7 @@ export default function DebugControls() {
     expPerlinInt,
     candleColorStart,
     candleColorEnd,
+    crystalColorStart,
+    crystalColorEnd,
   };
 }
