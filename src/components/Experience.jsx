@@ -11,12 +11,13 @@ import {
   ProjectPortalMaterial,
   GamePortalMaterial,
   ExpPortalMaterial,
-  CandleMaterial,
   CrystalBallMaterial,
   StaffGemMaterial,
+  CandleMaterial,
 } from "./Shaders";
 
 import Controls from "./DebugControls";
+import Player from "./Player";
 // ----- Component import -----
 
 // Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
@@ -118,12 +119,6 @@ export default function Experience() {
     controls.expPerlinInt,
   ]);
 
-  // Update candleFire property's with Leva control changes
-  React.useEffect(() => {
-    candleMaterial.current.uColorStart.set(controls.candleColorStart);
-    candleMaterial.current.uColorEnd.set(controls.candleColorEnd);
-  }, [controls.candleColorStart, controls.candleColorEnd]);
-
   // Update crystalBall property's with Leva control changes
   React.useEffect(() => {
     crystalBallMaterial.current.uColorStart.set(controls.crystalColorStart);
@@ -135,11 +130,17 @@ export default function Experience() {
     staffGemMaterial.current.uColorStart.set(controls.staffColorStart);
     staffGemMaterial.current.uColorEnd.set(controls.staffColorEnd);
   }, [controls.staffColorStart, controls.staffColorEnd]);
+
+  // Update candleFire property's with Leva control changes
+  React.useEffect(() => {
+    candleMaterial.current.uColorStart.set(controls.candleColorStart);
+    candleMaterial.current.uColorEnd.set(controls.candleColorEnd);
+  }, [controls.candleColorStart, controls.candleColorEnd]);
   // ----- USEEFFECT UPDATES -----
 
   return (
     <>
-      <color args={["#030202"]} attach={"background"} />
+      <color args={[controls.backgroundColor]} attach={"background"} />
 
       {/* Inject perf */}
       {controls.perfVisible ? <Perf position="top-left" /> : null}
@@ -196,13 +197,6 @@ export default function Experience() {
         >
           <expPortalMaterial ref={expPortalMaterial} />
         </mesh>
-        {/* Load candleFire */}
-        <mesh
-          geometry={nodes.candleFire.geometry}
-          position={nodes.candleFire.position}
-        >
-          <candleMaterial ref={candleMaterial} />
-        </mesh>
         {/* Load crystalBall */}
         <mesh
           geometry={nodes.crystalBall.geometry}
@@ -211,13 +205,30 @@ export default function Experience() {
           <crystalBallMaterial ref={crystalBallMaterial} />
         </mesh>
 
+        {/* Load staffGem */}
         <mesh
           geometry={nodes.staffGem.geometry}
           position={nodes.staffGem.position}
         >
           <staffGemMaterial ref={staffGemMaterial} />
         </mesh>
+
+        {/* Load candleFire (needs update after glb reload) */}
+        <mesh
+          geometry={nodes.candleFire.geometry}
+          position={nodes.candleFire.position}
+        >
+          <candleMaterial ref={candleMaterial} />
+        </mesh>
+
+        {/* Load fireBowl (needs update after glb reload) */}
+        <mesh
+          geometry={nodes.fireBowl.geometry}
+          position={nodes.fireBowl.position}
+        ></mesh>
       </Center>
+
+      <Player />
     </>
   );
 }

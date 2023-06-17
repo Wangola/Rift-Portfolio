@@ -8,6 +8,11 @@ export default function DebugControls() {
     perfVisible: false,
   });
 
+  // Background color
+  const { backgroundColor } = useControls({
+    backgroundColor: "#030202",
+  });
+
   // Simple test for crystal movement
   const { position, visible } = useControls(
     "Nexus Crystal",
@@ -84,16 +89,6 @@ export default function DebugControls() {
   );
   // --- Portal color management ---
 
-  // Candle Fire
-  const { candleColorStart, candleColorEnd } = useControls(
-    "Candle Fire",
-    {
-      candleColorStart: "#FFBF00",
-      candleColorEnd: "#FFCC00",
-    },
-    { collapsed: true }
-  );
-
   // Crystal ball
   const { crystalColorStart, crystalColorEnd } = useControls(
     "Crystal Ball",
@@ -114,11 +109,22 @@ export default function DebugControls() {
     { collapsed: true }
   );
 
+  // Candle Fire
+  const { candleColorStart, candleColorEnd } = useControls(
+    "Candle Fire",
+    {
+      candleColorStart: "#FFBF00",
+      candleColorEnd: "#FFCC00",
+    },
+    { collapsed: true }
+  );
+
   // ----- LEVA/PERF INFO (debug) -----
 
   // Return all the values
   return {
     perfVisible,
+    backgroundColor,
     position,
     visible,
     projectColorStart,
@@ -136,11 +142,11 @@ export default function DebugControls() {
     expColorPerlin,
     expDisplacedInt,
     expPerlinInt,
-    candleColorStart,
-    candleColorEnd,
     crystalColorStart,
     crystalColorEnd,
     staffColorStart,
     staffColorEnd,
+    candleColorStart,
+    candleColorEnd,
   };
 }

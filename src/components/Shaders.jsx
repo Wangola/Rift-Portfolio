@@ -65,16 +65,6 @@ const ExpPortalMaterial = shaderMaterial(
   portalFragmentShader
 );
 
-const CandleMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uColorStart: new THREE.Color(),
-    uColorEnd: new THREE.Color(),
-  },
-  candleVertexShader,
-  candleFragmentShader
-);
-
 const CrystalBallMaterial = shaderMaterial(
   {
     uTime: 0,
@@ -95,13 +85,23 @@ const StaffGemMaterial = shaderMaterial(
   staffFragmentShader
 );
 
+const CandleMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColorStart: new THREE.Color(),
+    uColorEnd: new THREE.Color(),
+  },
+  candleVertexShader,
+  candleFragmentShader
+);
+
 // Exporting shader materials
 export {
   NexusMaterial,
   ProjectPortalMaterial,
   GamePortalMaterial,
   ExpPortalMaterial,
-  CandleMaterial,
   CrystalBallMaterial,
   StaffGemMaterial,
+  CandleMaterial,
 };
