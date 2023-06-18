@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
-import { useTexture, useGLTF, OrbitControls, Center } from "@react-three/drei";
+import { useTexture, useGLTF } from "@react-three/drei";
 import { Perf } from "r3f-perf";
+import { RigidBody } from "@react-three/rapier";
 
 // Shader support imports
 import { extend, useFrame } from "@react-three/fiber";
@@ -17,7 +18,6 @@ import {
 } from "./Shaders";
 
 import Controls from "./DebugControls";
-import Player from "./Player";
 // ----- Component import -----
 
 // Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
@@ -145,90 +145,96 @@ export default function Experience() {
       {/* Inject perf */}
       {controls.perfVisible ? <Perf position="top-left" /> : null}
 
-      <OrbitControls makeDefault />
-
-      <Center>
+      {/* Could have the type be "kinematicPosition" for just a square shell */}
+      <RigidBody type="fixed" colliders="trimesh" friction={0}>
         {/* Load Scene */}
-        <mesh geometry={nodes.baked.geometry} position={nodes.baked.position}>
+        <mesh
+          geometry={nodes.baked.geometry}
+          position={nodes.baked.position}
+          receiveShadow
+        >
           <meshBasicMaterial map={bakedTexture} />
         </mesh>
+
         {/* Load Floor */}
         <mesh
           geometry={nodes.floorBaked.geometry}
           position={nodes.floorBaked.position}
+          receiveShadow
         >
           <meshBasicMaterial map={bakedFloor} />
         </mesh>
-        {/* Load Nexus Crystal */}
-        <mesh
-          geometry={nodes.nexusCrystal.geometry}
-          position={[
-            controls.position.x,
-            controls.position.y,
-            nodes.nexusCrystal.position.z,
-          ]}
-          visible={controls.visible}
-        >
-          <nexusMaterial ref={nexusMaterial} />
-        </mesh>
-        {/* Load Names */}
-        <mesh
-          geometry={nodes.names.geometry}
-          position={nodes.names.position}
-        ></mesh>
-        {/* Load projectPortalEnt */}
-        <mesh
-          geometry={nodes.projectPortalEnt.geometry}
-          position={nodes.projectPortalEnt.position}
-        >
-          <projectPortalMaterial ref={projectPortalMaterial} />
-        </mesh>
-        {/* Load gamePortalEnt */}
-        <mesh
-          geometry={nodes.gamePortalEnt.geometry}
-          position={nodes.gamePortalEnt.position}
-        >
-          <gamePortalMaterial ref={gamePortalMaterial} />
-        </mesh>
-        {/* Load expPortalEnt */}
-        <mesh
-          geometry={nodes.expPortalEnt.geometry}
-          position={nodes.expPortalEnt.position}
-        >
-          <expPortalMaterial ref={expPortalMaterial} />
-        </mesh>
-        {/* Load crystalBall */}
-        <mesh
-          geometry={nodes.crystalBall.geometry}
-          position={nodes.crystalBall.position}
-        >
-          <crystalBallMaterial ref={crystalBallMaterial} />
-        </mesh>
+      </RigidBody>
 
-        {/* Load staffGem */}
-        <mesh
-          geometry={nodes.staffGem.geometry}
-          position={nodes.staffGem.position}
-        >
-          <staffGemMaterial ref={staffGemMaterial} />
-        </mesh>
+      {/* Load Nexus Crystal */}
+      <mesh
+        geometry={nodes.nexusCrystal.geometry}
+        position={[
+          controls.position.x,
+          controls.position.y,
+          nodes.nexusCrystal.position.z,
+        ]}
+        castShadow
+        visible={controls.visible}
+      >
+        <nexusMaterial ref={nexusMaterial} />
+      </mesh>
 
-        {/* Load candleFire (needs update after glb reload) */}
-        <mesh
-          geometry={nodes.candleFire.geometry}
-          position={nodes.candleFire.position}
-        >
-          <candleMaterial ref={candleMaterial} />
-        </mesh>
+      {/* Load Names */}
+      <mesh
+        geometry={nodes.names.geometry}
+        position={nodes.names.position}
+      ></mesh>
+      {/* Load projectPortalEnt */}
+      <mesh
+        geometry={nodes.projectPortalEnt.geometry}
+        position={nodes.projectPortalEnt.position}
+      >
+        <projectPortalMaterial ref={projectPortalMaterial} />
+      </mesh>
+      {/* Load gamePortalEnt */}
+      <mesh
+        geometry={nodes.gamePortalEnt.geometry}
+        position={nodes.gamePortalEnt.position}
+      >
+        <gamePortalMaterial ref={gamePortalMaterial} />
+      </mesh>
+      {/* Load expPortalEnt */}
+      <mesh
+        geometry={nodes.expPortalEnt.geometry}
+        position={nodes.expPortalEnt.position}
+      >
+        <expPortalMaterial ref={expPortalMaterial} />
+      </mesh>
+      {/* Load crystalBall */}
+      <mesh
+        geometry={nodes.crystalBall.geometry}
+        position={nodes.crystalBall.position}
+      >
+        <crystalBallMaterial ref={crystalBallMaterial} />
+      </mesh>
 
-        {/* Load fireBowl (needs update after glb reload) */}
-        <mesh
-          geometry={nodes.fireBowl.geometry}
-          position={nodes.fireBowl.position}
-        ></mesh>
-      </Center>
+      {/* Load staffGem */}
+      <mesh
+        geometry={nodes.staffGem.geometry}
+        position={nodes.staffGem.position}
+      >
+        <staffGemMaterial ref={staffGemMaterial} />
+      </mesh>
 
-      <Player />
+      {/* Load candleFire (needs update after glb reload) */}
+      <mesh
+        geometry={nodes.candleFire.geometry}
+        position={nodes.candleFire.position}
+      >
+        <candleMaterial ref={candleMaterial} />
+      </mesh>
+
+      {/* Load fireBowl (needs update after glb reload) */}
+      <mesh
+        geometry={nodes.fireBowl.geometry}
+        position={nodes.fireBowl.position}
+      ></mesh>
     </>
   );
 }

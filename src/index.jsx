@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import "./style.css";
 import { createRoot } from "react-dom/client";
 // Custom imports
-import Experience from "./components/Experience";
+import Experience from "./Experience";
 import { Leva } from "leva";
 import { StrictMode } from "react";
 
@@ -13,7 +13,7 @@ const root = createRoot(document.querySelector("#root"));
 root.render(
   <StrictMode>
     <Leva collapsed />
-    <Canvas camera={{ fov: 75, position: [15.5, 5.5, 15.5] }}>
+    <Canvas camera={{ fov: 75, position: [20.5, 5.5, 20.5] }}>
       <Experience />
     </Canvas>
   </StrictMode>
