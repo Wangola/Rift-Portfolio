@@ -6,13 +6,16 @@ import { Physics } from "@react-three/rapier";
 import Level from "./components/Level";
 import Lights from "./components/Lights";
 import Player from "./components/Player";
+import DebugControls from "./components/DebugControls";
 
 export default function Experience() {
+  const controls = DebugControls();
+
   return (
     <>
       <OrbitControls makeDefault />
 
-      <Physics debug>
+      <Physics debug={controls.physicsVisible}>
         <Lights />
         <Level />
         <Player />

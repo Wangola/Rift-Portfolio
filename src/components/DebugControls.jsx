@@ -8,6 +8,10 @@ export default function DebugControls() {
     perfVisible: false,
   });
 
+  const { physicsVisible } = useControls({
+    physicsVisible: false,
+  });
+
   // Background color
   const { backgroundColor } = useControls({
     backgroundColor: "#030202",
@@ -124,6 +128,7 @@ export default function DebugControls() {
   // Return all the values
   return {
     perfVisible,
+    physicsVisible,
     backgroundColor,
     position,
     visible,

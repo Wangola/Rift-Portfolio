@@ -17,7 +17,7 @@ import {
   CandleMaterial,
 } from "./Shaders";
 
-import Controls from "./DebugControls";
+import DebugControls from "./DebugControls";
 // ----- Component import -----
 
 // Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
@@ -37,7 +37,7 @@ export default function Experience() {
   const { nodes } = useGLTF("./model/testing.glb");
 
   // Initializing Control Function (Any leva value needed will begin with controls.)
-  const controls = Controls();
+  const controls = DebugControls();
 
   // // Loads texture
   const bakedTexture = useTexture("./model/testingBaked.jpg");
