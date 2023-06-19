@@ -1,6 +1,6 @@
 import React from "react";
 import { OrbitControls } from "@react-three/drei";
-import { Physics } from "@react-three/rapier";
+import { Physics, Debug } from "@react-three/rapier";
 
 // Custom imports
 import Level from "./components/Level";
@@ -13,9 +13,12 @@ export default function Experience() {
 
   return (
     <>
-      <OrbitControls makeDefault />
+      {controls.orbitActive ? <OrbitControls makeDefault /> : null}
 
-      <Physics debug={controls.physicsVisible}>
+      {/* Old ver needed debug={controls.physicsVisible} */}
+      <Physics>
+        {/* With latets version of rapier */}
+        {controls.physicsVisible ? <Debug /> : null}
         <Lights />
         <Level />
         <Player />

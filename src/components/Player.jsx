@@ -1,45 +1,75 @@
 import { RigidBody } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
-import { useRef } from "react";
+import { useState, useRef } from "react";
+import * as THREE from "three";
 
 export default function Player() {
   const body = useRef();
   // subscribeKeys (gets key changes) getKeys (gets key states)
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
+  const [smoothedCameraPosition] = useState(
+    () => new THREE.Vector3(40, 40, 40)
+  );
+  const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
+
   useFrame((state, delta) => {
+    /**
+     * Controls
+     */
     const { forward, backward, leftward, rightward } = getKeys();
 
     const impulse = { x: 0, y: 0, z: 0 };
     const torque = { x: 0, y: 0, z: 0 };
 
     // Delta will keep same movement no matter framerate
-    const impulseStrength = 50 * delta;
-    const torqueStrength = 25 * delta;
+    const impulseStrength = 40 * delta;
+    const torqueStrength = 20 * delta;
 
     if (forward) {
       impulse.z -= impulseStrength;
-      torque.x -= torqueStrength;
+      // torque.x -= torqueStrength;
     }
 
     if (rightward) {
       impulse.x += impulseStrength;
-      torque.z -= torqueStrength;
+      // torque.z -= torqueStrength;
     }
 
     if (backward) {
       impulse.z += impulseStrength;
-      torque.z += torqueStrength;
+      // torque.z += torqueStrength;
     }
 
     if (leftward) {
       impulse.x -= impulseStrength;
-      torque.z += torqueStrength;
+      // torque.z += torqueStrength;
     }
 
     body.current.applyImpulse(impulse);
     body.current.applyTorqueImpulse(torque);
+
+    /**
+     * Camera
+     */
+    const bodyPosition = body.current.translation();
+
+    const cameraPosition = new THREE.Vector3();
+    cameraPosition.copy(bodyPosition);
+    cameraPosition.z += 3.5;
+    cameraPosition.x += 5;
+    cameraPosition.y += 4;
+
+    const cameraTarget = new THREE.Vector3();
+    cameraTarget.copy(bodyPosition);
+    cameraTarget.y -= 0.25;
+
+    smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
+    smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
+
+    state.camera.position.copy(smoothedCameraPosition);
+    state.camera.lookAt(smoothedCameraTarget);
   });
 
   return (
@@ -54,7 +84,7 @@ export default function Player() {
         position={[16, 3.5, 16]}
       >
         <mesh castShadow>
-          <capsuleGeometry args={[0.8, 1]} />
+          <boxGeometry args={[1, 2]} />
           <meshStandardMaterial flatShading color={"mediumpurple"} />
         </mesh>
       </RigidBody>

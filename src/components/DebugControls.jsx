@@ -8,6 +8,12 @@ export default function DebugControls() {
     perfVisible: false,
   });
 
+  // OrbitControls
+  const { orbitActive } = useControls({
+    orbitActive: false,
+  });
+
+  // Physics Visibility
   const { physicsVisible } = useControls({
     physicsVisible: false,
   });
@@ -128,6 +134,7 @@ export default function DebugControls() {
   // Return all the values
   return {
     perfVisible,
+    orbitActive,
     physicsVisible,
     backgroundColor,
     position,

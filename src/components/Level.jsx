@@ -32,7 +32,9 @@ extend({
 });
 
 export default function Experience() {
-  // ----- LOADING GEO/TEX INFO -----
+  /**
+   * Loading Process
+   */
   // Destructure model load
   const { nodes } = useGLTF("./model/testing.glb");
 
@@ -45,9 +47,9 @@ export default function Experience() {
   const bakedFloor = useTexture("./model/testing.jpg");
   bakedFloor.flipY = false;
 
-  // ----- LOADING GEO/TEX INFO -----
-
-  // ----- ANIMATION INFO -----
+  /**
+   * Animation Info
+   */
   const nexusMaterial = useRef();
   const projectPortalMaterial = useRef();
   const gamePortalMaterial = useRef();
@@ -66,9 +68,10 @@ export default function Experience() {
     crystalBallMaterial.current.uTime += delta;
     staffGemMaterial.current.uTime += delta;
   });
-  // ----- ANIMATION INFO -----
 
-  // ----- USEEFFECT UPDATES -----
+  /**
+   * UseEffect updates
+   */
   // Update projectPortal property's with Leva control changes
   React.useEffect(() => {
     projectPortalMaterial.current.uColorStart.set(controls.projectColorStart);
@@ -136,7 +139,6 @@ export default function Experience() {
     candleMaterial.current.uColorStart.set(controls.candleColorStart);
     candleMaterial.current.uColorEnd.set(controls.candleColorEnd);
   }, [controls.candleColorStart, controls.candleColorEnd]);
-  // ----- USEEFFECT UPDATES -----
 
   return (
     <>
