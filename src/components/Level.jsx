@@ -2,11 +2,14 @@ import React, { useRef } from "react";
 import { useTexture, useGLTF } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import { RigidBody } from "@react-three/rapier";
+import { Quaternion, Vector3 } from "three";
 
 // Shader support imports
 import { extend, useFrame } from "@react-three/fiber";
 
-// ----- Component import -----
+/**
+ *  Component import
+ */
 import {
   NexusMaterial,
   ProjectPortalMaterial,
@@ -18,9 +21,10 @@ import {
 } from "./Shaders";
 
 import DebugControls from "./DebugControls";
-// ----- Component import -----
 
-// Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
+/**
+ * Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
+ */
 extend({
   NexusMaterial,
   ProjectPortalMaterial,
@@ -36,16 +40,34 @@ export default function Experience() {
    * Loading Process
    */
   // Destructure model load
-  const { nodes } = useGLTF("./model/testing.glb");
+  const { nodes } = useGLTF("./model/baked.glb");
 
   // Initializing Control Function (Any leva value needed will begin with controls.)
   const controls = DebugControls();
 
-  // // Loads texture
-  const bakedTexture = useTexture("./model/testingBaked.jpg");
+  // Loads textures
+  const bakedTexture = useTexture("./model/baked.jpg");
   bakedTexture.flipY = false;
-  const bakedFloor = useTexture("./model/testing.jpg");
+  const bakedFloor = useTexture("./model/bakedFloor.jpg");
   bakedFloor.flipY = false;
+  const bakedExtra = useTexture("./model/bakedExtra.jpg");
+  bakedExtra.flipY = false;
+
+  /**
+   * Node Extraction
+   */
+  // Dynamically add emissions objects into scene (specify include name for group).
+  const nodeNames = [];
+
+  // Looping through the nodes property
+  for (const nodeName in nodes) {
+    if (nodes.hasOwnProperty(nodeName)) {
+      const node = nodes[nodeName];
+      if (node.isMesh && nodeName !== "baked" && nodeName !== "floorBaked") {
+        nodeNames.push(nodeName);
+      }
+    }
+  }
 
   /**
    * Animation Info
@@ -58,6 +80,10 @@ export default function Experience() {
   const crystalBallMaterial = useRef();
   const staffGemMaterial = useRef();
 
+  // Custom rotationSpeed for Pillars
+  const nexusPillarRef = useRef();
+  const rotationSpeed = 0.3; // Speed of rotation
+
   // Tick handler
   useFrame((state, delta) => {
     nexusMaterial.current.uTime += delta;
@@ -67,6 +93,11 @@ export default function Experience() {
     candleMaterial.current.uTime += delta;
     crystalBallMaterial.current.uTime += delta;
     staffGemMaterial.current.uTime += delta;
+
+    // Update rotation
+    if (nexusPillarRef.current) {
+      nexusPillarRef.current.rotation.y += rotationSpeed * 0.01;
+    }
   });
 
   /**
@@ -158,6 +189,15 @@ export default function Experience() {
           <meshBasicMaterial map={bakedTexture} />
         </mesh>
 
+        {/* Load nexusPillar */}
+        <mesh
+          ref={nexusPillarRef}
+          geometry={nodes.nexusPillar.geometry}
+          position={nodes.nexusPillar.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+
         {/* Load Floor */}
         <mesh
           geometry={nodes.floorBaked.geometry}
@@ -166,6 +206,40 @@ export default function Experience() {
         >
           <meshBasicMaterial map={bakedFloor} />
         </mesh>
+
+        {/* Load Panels */}
+        {/* frontEndBaked */}
+        <mesh
+          geometry={nodes.frontEndBaked.geometry}
+          position={nodes.frontEndBaked.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+        {/* backEndBaked */}
+        <mesh
+          geometry={nodes.backEndBaked.geometry}
+          position={nodes.backEndBaked.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+
+        {/* langBaked */}
+        <mesh
+          geometry={nodes.langBaked.geometry}
+          position={nodes.langBaked.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+
+        {/* contactBaked */}
+        <mesh
+          geometry={nodes.contactBaked.geometry}
+          position={nodes.contactBaked.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+
+        {/* Load Panels */}
       </RigidBody>
 
       {/* Load Nexus Crystal */}
@@ -224,46 +298,31 @@ export default function Experience() {
         <staffGemMaterial ref={staffGemMaterial} />
       </mesh>
 
-      {/* Load candleFire (needs update after glb reload) */}
-      <mesh
-        geometry={nodes.candleFire.geometry}
-        position={nodes.candleFire.position}
-      >
-        <candleMaterial ref={candleMaterial} />
-      </mesh>
+      {/* Load candles */}
+      {nodeNames.map((nodeName, index) => {
+        if (nodeName.includes("candle")) {
+          const geometry = nodes[nodeName].geometry;
+          const position = nodes[nodeName].position;
+
+          return (
+            <mesh key={index} geometry={geometry} position={position}>
+              <candleMaterial ref={candleMaterial} />
+            </mesh>
+          );
+        }
+        return null;
+      })}
 
       {/* Load fireBowl (needs update after glb reload) */}
-      <mesh
-        geometry={nodes.fireBowl.geometry}
-        position={nodes.fireBowl.position}
-      ></mesh>
+      {nodeNames.map((nodeName, index) => {
+        if (nodeName.includes("fireBowl")) {
+          const geometry = nodes[nodeName].geometry;
+          const position = nodes[nodeName].position;
+
+          return <mesh key={index} geometry={geometry} position={position} />;
+        }
+        return null;
+      })}
     </>
   );
 }
-
-// // Dynamically add emissions objects into scene. (added before return)
-// const nodeNames = [];
-
-// // Looping through the nodes property
-// for (const nodeName in nodes) {
-//   // If nodes has a property match set true.
-//   if (nodes.hasOwnProperty(nodeName)) {
-//     // Set current node with nodes[name]
-//     const node = nodes[nodeName];
-
-//     // If node is a mesh and is not baked (add to map)
-//     if (node.isMesh && nodeName !== "baked" && nodeName !== "floorBaked") {
-//       // Store the node name in the array
-//       nodeNames.push(nodeName);
-//     }
-//   }
-// }
-
-// {/* Load all emissions */}  (add in return)
-// {nodeNames.map((nodeName, index) => {
-//   // Dynamically access the geometry using the nodeName
-//   const geometry = nodes[nodeName].geometry;
-//   const position = nodes[nodeName].position;
-
-//   return <mesh key={index} geometry={geometry} position={position} />;
-// })}

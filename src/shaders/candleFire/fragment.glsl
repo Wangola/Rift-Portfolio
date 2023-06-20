@@ -89,18 +89,18 @@ float cnoise(vec3 P)
 }
 
 void main() {
-  // Adjust the wave frequency and speed
-  float frequency = 20.0;
-  float speed = 0.8;
+  // // Adjust the wave frequency and speed
+  // float frequency = 20.0;
+  // float speed = 0.8;
 
-  // Calculate the wave height using the sine function and time
-  float waveHeight = sin(vUv.y * frequency + vTime * speed);
+  // // Calculate the wave height using the sine function and time
+  // float waveHeight = sin(vUv.y * frequency + vTime * speed);
 
-  // Normalize the wave height to the range [0, 1]
-  waveHeight = (waveHeight + 1.0) / 2.0;
+  // // Normalize the wave height to the range [0, 1]
+  // waveHeight = (waveHeight + 1.0) / 2.0;
 
-  // Apply the wave height as the mixing factor between the colors
-  vec3 color = mix(uColorStart, uColorEnd, waveHeight);
+  // // Apply the wave height as the mixing factor between the colors
+  // vec3 color = mix(uColorStart, uColorEnd, waveHeight);
 
-  gl_FragColor = vec4(color, 1.0);
+  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
 }

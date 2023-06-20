@@ -4,13 +4,19 @@ import { useKeyboardControls } from "@react-three/drei";
 import { useState, useRef } from "react";
 import * as THREE from "three";
 
+// Custom Imports
+import DebugControls from "./DebugControls";
+
 export default function Player() {
+  // Import orbitControls check to remove lock on camera
+  const controls = new DebugControls();
+
   const body = useRef();
   // subscribeKeys (gets key changes) getKeys (gets key states)
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
   const [smoothedCameraPosition] = useState(
-    () => new THREE.Vector3(40, 40, 40)
+    () => new THREE.Vector3(50, 50, 50)
   );
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
 
@@ -53,23 +59,25 @@ export default function Player() {
     /**
      * Camera
      */
-    const bodyPosition = body.current.translation();
+    if (!controls.orbitActive) {
+      const bodyPosition = body.current.translation();
 
-    const cameraPosition = new THREE.Vector3();
-    cameraPosition.copy(bodyPosition);
-    cameraPosition.z += 3.5;
-    cameraPosition.x += 5;
-    cameraPosition.y += 4;
+      const cameraPosition = new THREE.Vector3();
+      cameraPosition.copy(bodyPosition);
+      cameraPosition.z += 3.5;
+      cameraPosition.x += 5;
+      cameraPosition.y += 4;
 
-    const cameraTarget = new THREE.Vector3();
-    cameraTarget.copy(bodyPosition);
-    cameraTarget.y -= 0.25;
+      const cameraTarget = new THREE.Vector3();
+      cameraTarget.copy(bodyPosition);
+      cameraTarget.y -= 0.25;
 
-    smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
-    smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
+      smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
+      smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
 
-    state.camera.position.copy(smoothedCameraPosition);
-    state.camera.lookAt(smoothedCameraTarget);
+      state.camera.position.copy(smoothedCameraPosition);
+      state.camera.lookAt(smoothedCameraTarget);
+    }
   });
 
   return (
@@ -85,7 +93,7 @@ export default function Player() {
       >
         <mesh castShadow>
           <boxGeometry args={[1, 2]} />
-          <meshStandardMaterial flatShading color={"mediumpurple"} />
+          <meshStandardMaterial flatShading color={"orange"} />
         </mesh>
       </RigidBody>
     </>
