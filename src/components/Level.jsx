@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { useTexture, useGLTF } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import { RigidBody } from "@react-three/rapier";
-import { Quaternion, Vector3 } from "three";
 
 // Shader support imports
 import { extend, useFrame } from "@react-three/fiber";
