@@ -17,6 +17,7 @@ import {
   CrystalBallMaterial,
   StaffGemMaterial,
   CandleMaterial,
+  BowlMaterial,
 } from "./Shaders";
 
 import DebugControls from "./DebugControls";
@@ -32,6 +33,7 @@ extend({
   CandleMaterial,
   CrystalBallMaterial,
   StaffGemMaterial,
+  BowlMaterial,
 });
 
 export default function Experience() {
@@ -71,13 +73,12 @@ export default function Experience() {
   /**
    * Animation Info
    */
-  const nexusMaterial = useRef();
-  const projectPortalMaterial = useRef();
-  const gamePortalMaterial = useRef();
-  const expPortalMaterial = useRef();
-  const candleMaterial = useRef();
-  const crystalBallMaterial = useRef();
-  const staffGemMaterial = useRef();
+  const nexusMaterialRef = useRef();
+  const projectPortalMaterialRef = useRef();
+  const gamePortalMaterialRef = useRef();
+  const expPortalMaterialRef = useRef();
+  const crystalBallMaterialRef = useRef();
+  const staffGemMaterialRef = useRef();
 
   // Custom rotationSpeed for Pillars
   const nexusPillarRef = useRef();
@@ -85,13 +86,12 @@ export default function Experience() {
 
   // Tick handler
   useFrame((state, delta) => {
-    nexusMaterial.current.uTime += delta;
-    projectPortalMaterial.current.uTime += delta;
-    gamePortalMaterial.current.uTime += delta;
-    expPortalMaterial.current.uTime += delta;
-    candleMaterial.current.uTime += delta;
-    crystalBallMaterial.current.uTime += delta;
-    staffGemMaterial.current.uTime += delta;
+    nexusMaterialRef.current.uTime += delta;
+    projectPortalMaterialRef.current.uTime += delta;
+    gamePortalMaterialRef.current.uTime += delta;
+    expPortalMaterialRef.current.uTime += delta;
+    crystalBallMaterialRef.current.uTime += delta;
+    staffGemMaterialRef.current.uTime += delta;
 
     // Update rotation
     if (nexusPillarRef.current) {
@@ -104,12 +104,16 @@ export default function Experience() {
    */
   // Update projectPortal property's with Leva control changes
   React.useEffect(() => {
-    projectPortalMaterial.current.uColorStart.set(controls.projectColorStart);
-    projectPortalMaterial.current.uColorEnd.set(controls.projectColorEnd);
-    projectPortalMaterial.current.uColorPerlin.set(controls.projectColorPerlin);
-    projectPortalMaterial.current.uniforms.uDisplacedInt.value =
+    projectPortalMaterialRef.current.uColorStart.set(
+      controls.projectColorStart
+    );
+    projectPortalMaterialRef.current.uColorEnd.set(controls.projectColorEnd);
+    projectPortalMaterialRef.current.uColorPerlin.set(
+      controls.projectColorPerlin
+    );
+    projectPortalMaterialRef.current.uniforms.uDisplacedInt.value =
       controls.projectDisplacedInt;
-    projectPortalMaterial.current.uniforms.uPerlinInt.value =
+    projectPortalMaterialRef.current.uniforms.uPerlinInt.value =
       controls.projectPerlinInt;
   }, [
     controls.projectColorStart,
@@ -121,12 +125,12 @@ export default function Experience() {
 
   // Update gamesPortal property's with Leva control changes.
   React.useEffect(() => {
-    gamePortalMaterial.current.uColorStart.set(controls.gameColorStart);
-    gamePortalMaterial.current.uColorEnd.set(controls.gameColorEnd);
-    gamePortalMaterial.current.uColorPerlin.set(controls.gameColorPerlin);
-    gamePortalMaterial.current.uniforms.uDisplacedInt.value =
+    gamePortalMaterialRef.current.uColorStart.set(controls.gameColorStart);
+    gamePortalMaterialRef.current.uColorEnd.set(controls.gameColorEnd);
+    gamePortalMaterialRef.current.uColorPerlin.set(controls.gameColorPerlin);
+    gamePortalMaterialRef.current.uniforms.uDisplacedInt.value =
       controls.gameDisplacedInt;
-    gamePortalMaterial.current.uniforms.uPerlinInt.value =
+    gamePortalMaterialRef.current.uniforms.uPerlinInt.value =
       controls.gamePerlinInt;
   }, [
     controls.gameColorStart,
@@ -138,12 +142,13 @@ export default function Experience() {
 
   // Update expPortal property's with Leva control changes.
   React.useEffect(() => {
-    expPortalMaterial.current.uColorStart.set(controls.expColorStart);
-    expPortalMaterial.current.uColorEnd.set(controls.expColorEnd);
-    expPortalMaterial.current.uColorPerlin.set(controls.expColorPerlin);
-    expPortalMaterial.current.uniforms.uDisplacedInt.value =
+    expPortalMaterialRef.current.uColorStart.set(controls.expColorStart);
+    expPortalMaterialRef.current.uColorEnd.set(controls.expColorEnd);
+    expPortalMaterialRef.current.uColorPerlin.set(controls.expColorPerlin);
+    expPortalMaterialRef.current.uniforms.uDisplacedInt.value =
       controls.expDisplacedInt;
-    expPortalMaterial.current.uniforms.uPerlinInt.value = controls.expPerlinInt;
+    expPortalMaterialRef.current.uniforms.uPerlinInt.value =
+      controls.expPerlinInt;
   }, [
     controls.expColorStart,
     controls.expColorEnd,
@@ -154,21 +159,42 @@ export default function Experience() {
 
   // Update crystalBall property's with Leva control changes
   React.useEffect(() => {
-    crystalBallMaterial.current.uColorStart.set(controls.crystalColorStart);
-    crystalBallMaterial.current.uColorEnd.set(controls.crystalColorEnd);
+    crystalBallMaterialRef.current.uColorStart.set(controls.crystalColorStart);
+    crystalBallMaterialRef.current.uColorEnd.set(controls.crystalColorEnd);
   }, [controls.crystalColorStart, controls.crystalColorEnd]);
 
   // Update staffGem property's with Leva control changes
   React.useEffect(() => {
-    staffGemMaterial.current.uColorStart.set(controls.staffColorStart);
-    staffGemMaterial.current.uColorEnd.set(controls.staffColorEnd);
+    staffGemMaterialRef.current.uColorStart.set(controls.staffColorStart);
+    staffGemMaterialRef.current.uColorEnd.set(controls.staffColorEnd);
   }, [controls.staffColorStart, controls.staffColorEnd]);
 
-  // Update candleFire property's with Leva control changes
+  /**
+   * Candle Material Handler
+   */
+  // Material array
+  const candleMaterialRefs = useRef([]);
+
+  // Update candleMaterial property's with Leva control changes
   React.useEffect(() => {
-    candleMaterial.current.uColorStart.set(controls.candleColorStart);
-    candleMaterial.current.uColorEnd.set(controls.candleColorEnd);
+    candleMaterialRefs.current.forEach(({ material, properties }) => {
+      material.current.uColorStart.set(properties.candleColorStart);
+      material.current.uColorEnd.set(properties.candleColorEnd);
+    });
   }, [controls.candleColorStart, controls.candleColorEnd]);
+
+  /**
+   * Fire Bowl Material Handler
+   */
+  // Material array
+  const bowlMaterialRefs = useRef([]);
+
+  // Update bowlMaterial property's with Leva control changes
+  React.useEffect(() => {
+    bowlMaterialRefs.current.forEach(({ material, properties }) => {
+      material.current.uColor.set(properties.bowlColor);
+    });
+  }, [controls.bowlColor]);
 
   return (
     <>
@@ -252,7 +278,7 @@ export default function Experience() {
         castShadow
         visible={controls.visible}
       >
-        <nexusMaterial ref={nexusMaterial} />
+        <nexusMaterial ref={nexusMaterialRef} />
       </mesh>
 
       {/* Load Names */}
@@ -265,28 +291,28 @@ export default function Experience() {
         geometry={nodes.projectPortalEnt.geometry}
         position={nodes.projectPortalEnt.position}
       >
-        <projectPortalMaterial ref={projectPortalMaterial} />
+        <projectPortalMaterial ref={projectPortalMaterialRef} />
       </mesh>
       {/* Load gamePortalEnt */}
       <mesh
         geometry={nodes.gamePortalEnt.geometry}
         position={nodes.gamePortalEnt.position}
       >
-        <gamePortalMaterial ref={gamePortalMaterial} />
+        <gamePortalMaterial ref={gamePortalMaterialRef} />
       </mesh>
       {/* Load expPortalEnt */}
       <mesh
         geometry={nodes.expPortalEnt.geometry}
         position={nodes.expPortalEnt.position}
       >
-        <expPortalMaterial ref={expPortalMaterial} />
+        <expPortalMaterial ref={expPortalMaterialRef} />
       </mesh>
       {/* Load crystalBall */}
       <mesh
         geometry={nodes.crystalBall.geometry}
         position={nodes.crystalBall.position}
       >
-        <crystalBallMaterial ref={crystalBallMaterial} />
+        <crystalBallMaterial ref={crystalBallMaterialRef} />
       </mesh>
 
       {/* Load staffGem */}
@@ -294,7 +320,7 @@ export default function Experience() {
         geometry={nodes.staffGem.geometry}
         position={nodes.staffGem.position}
       >
-        <staffGemMaterial ref={staffGemMaterial} />
+        <staffGemMaterial ref={staffGemMaterialRef} />
       </mesh>
 
       {/* Load candles */}
@@ -303,9 +329,26 @@ export default function Experience() {
           const geometry = nodes[nodeName].geometry;
           const position = nodes[nodeName].position;
 
+          // Create a new ref for each candle material instance
+          const candleMaterialRef = useRef();
+
+          // Store the ref and additional properties in the candleMaterialRefs array
+          candleMaterialRefs.current[index] = {
+            material: candleMaterialRef,
+            properties: {
+              candleColorStart: controls.candleColorStart,
+              candleColorEnd: controls.candleColorEnd,
+            },
+          };
+
+          // Update the uTime uniform for each object
+          useFrame((state, delta) => {
+            candleMaterialRef.current.uTime += delta;
+          });
+
           return (
             <mesh key={index} geometry={geometry} position={position}>
-              <candleMaterial ref={candleMaterial} />
+              <candleMaterial ref={candleMaterialRef} />
             </mesh>
           );
         }
@@ -318,7 +361,27 @@ export default function Experience() {
           const geometry = nodes[nodeName].geometry;
           const position = nodes[nodeName].position;
 
-          return <mesh key={index} geometry={geometry} position={position} />;
+          // Create a new ref for each candle material instance
+          const bowlMaterialRef = useRef();
+
+          // Store the ref and additional properties in the candleMaterialRefs array
+          bowlMaterialRefs.current[index] = {
+            material: bowlMaterialRef,
+            properties: {
+              bowlColor: controls.bowlColor,
+            },
+          };
+
+          // Update the uTime uniform for each object
+          useFrame((state, delta) => {
+            bowlMaterialRef.current.uTime += delta;
+          });
+
+          return (
+            <mesh key={index} geometry={geometry} position={position}>
+              <bowlMaterial ref={bowlMaterialRef} />
+            </mesh>
+          );
         }
         return null;
       })}

@@ -1,7 +1,6 @@
 precision mediump float;
 
-uniform vec3 uColorStart;
-uniform vec3 uColorEnd;
+uniform vec3 uColor;
 
 varying vec2 vUv;
 // For some reason uTime uniform was not working so hard to transfer as varying
@@ -92,8 +91,10 @@ void main() {
   float strength = floor(vUv.y * 3.0) / 3.0;
   strength = clamp(vUv.y, 0.0, 1.0);
 
+  vec3 white = vec3(1.0,0.7,0.3);
+
   vec3 finalColor;
-  finalColor = mix(uColorEnd, uColorStart, strength);
+  finalColor = mix(uColor, white, strength);
 
   gl_FragColor = vec4(finalColor, 1.0);
 }

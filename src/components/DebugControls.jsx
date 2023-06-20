@@ -1,29 +1,37 @@
 import { useControls } from "leva";
 
 export default function DebugControls() {
-  // ----- LEVA/PERF INFO (debug) -----
-
-  // Perf Visibility
+  /**
+   * Perf Visibility
+   */
   const { perfVisible } = useControls({
     perfVisible: false,
   });
 
-  // OrbitControls
+  /**
+   * OrbitControls Activation
+   */
   const { orbitActive } = useControls({
     orbitActive: false,
   });
 
-  // Physics Visibility
+  /**
+   * Physics Visibility
+   */
   const { physicsVisible } = useControls({
     physicsVisible: false,
   });
 
-  // Background color
+  /**
+   * Background color
+   */
   const { backgroundColor } = useControls({
     backgroundColor: "#030202",
   });
 
-  // Simple test for crystal movement
+  /**
+   * Crystal movement
+   */
   const { position, visible } = useControls(
     "Nexus Crystal",
     {
@@ -40,7 +48,9 @@ export default function DebugControls() {
     { collapsed: true }
   );
 
-  // --- Portal color management ---
+  /**
+   * Portal color management
+   */
   // - Project Portal
   const {
     projectColorStart,
@@ -99,7 +109,9 @@ export default function DebugControls() {
   );
   // --- Portal color management ---
 
-  // Crystal ball
+  /**
+   * Crystal ball
+   */
   const { crystalColorStart, crystalColorEnd } = useControls(
     "Crystal Ball",
     {
@@ -109,7 +121,9 @@ export default function DebugControls() {
     { collapsed: true }
   );
 
-  // Staff Gem
+  /**
+   * Staff Gem
+   */
   const { staffColorStart, staffColorEnd } = useControls(
     "Staff Gem",
     {
@@ -119,12 +133,25 @@ export default function DebugControls() {
     { collapsed: true }
   );
 
-  // Candle Fire
+  /**
+   * Candle Fire
+   */
   const { candleColorStart, candleColorEnd } = useControls(
     "Candle Fire",
     {
       candleColorStart: "#FFBF00",
       candleColorEnd: "#FFCC00",
+    },
+    { collapsed: true }
+  );
+
+  /**
+   * Fire Bowl
+   */
+  const { bowlColor } = useControls(
+    "Bowl Fire",
+    {
+      bowlColor: "#ff6000",
     },
     { collapsed: true }
   );
@@ -160,5 +187,6 @@ export default function DebugControls() {
     staffColorEnd,
     candleColorStart,
     candleColorEnd,
+    bowlColor,
   };
 }
