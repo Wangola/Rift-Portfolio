@@ -86,36 +86,50 @@ function PanelsLoad({ nodes, bakedExtra }) {
   return (
     <>
       {/* frontEndBaked */}
-      <mesh
-        geometry={nodes.frontEndBaked.geometry}
-        position={nodes.frontEndBaked.position}
-      >
-        <meshBasicMaterial map={bakedExtra} />
-      </mesh>
+      <Float speed={3} rotationIntensity={0.1}>
+        <mesh
+          geometry={nodes.frontEndBaked.geometry}
+          position={nodes.frontEndBaked.position}
+          castShadow
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+      </Float>
 
       {/* backEndBaked */}
-      <mesh
-        geometry={nodes.backEndBaked.geometry}
-        position={nodes.backEndBaked.position}
-      >
-        <meshBasicMaterial map={bakedExtra} />
-      </mesh>
+      <Float speed={4} rotationIntensity={0.15}>
+        <mesh
+          geometry={nodes.backEndBaked.geometry}
+          position={nodes.backEndBaked.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+      </Float>
 
       {/* langBaked */}
-      <mesh
-        geometry={nodes.langBaked.geometry}
-        position={nodes.langBaked.position}
-      >
-        <meshBasicMaterial map={bakedExtra} />
-      </mesh>
+      <Float speed={3} rotationIntensity={0.1}>
+        <mesh
+          geometry={nodes.langBaked.geometry}
+          position={nodes.langBaked.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+      </Float>
 
       {/* contactBaked */}
-      <mesh
-        geometry={nodes.contactBaked.geometry}
-        position={nodes.contactBaked.position}
-      >
-        <meshBasicMaterial map={bakedExtra} />
-      </mesh>
+      <Float speed={3.2} rotationIntensity={0.15}>
+        <mesh
+          geometry={nodes.contactBaked.geometry}
+          position={nodes.contactBaked.position}
+        >
+          <meshBasicMaterial map={bakedExtra} />
+        </mesh>
+        {/* Name load */}
+        <mesh
+          geometry={nodes.name.geometry}
+          position={nodes.name.position}
+        ></mesh>
+      </Float>
     </>
   );
 }
@@ -146,18 +160,6 @@ function NexusCrystalLoad({ nodes, controls }) {
       >
         <nexusMaterial ref={nexusMaterialRef} />
       </mesh>
-    </>
-  );
-}
-
-function NameLoad({ nodes }) {
-  return (
-    <>
-      {/* Load name */}
-      <mesh
-        geometry={nodes.name.geometry}
-        position={nodes.name.position}
-      ></mesh>
     </>
   );
 }
@@ -499,8 +501,6 @@ export default function Experience() {
       </RigidBody>
 
       <NexusCrystalLoad nodes={nodes} controls={controls} />
-
-      <NameLoad nodes={nodes} />
 
       <SignNamesLoad nodes={nodes} />
 
