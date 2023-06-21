@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { useTexture, useGLTF } from "@react-three/drei";
+import { useTexture, useGLTF, Float } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import { RigidBody } from "@react-three/rapier";
 
@@ -150,13 +150,25 @@ function NexusCrystalLoad({ nodes, controls }) {
   );
 }
 
-function NamesLoad({ nodes }) {
+function NameLoad({ nodes }) {
   return (
     <>
-      {/* Load Names */}
+      {/* Load name */}
       <mesh
-        geometry={nodes.names.geometry}
-        position={nodes.names.position}
+        geometry={nodes.name.geometry}
+        position={nodes.name.position}
+      ></mesh>
+    </>
+  );
+}
+
+function SignNamesLoad({ nodes }) {
+  return (
+    <>
+      {/* Load signNames */}
+      <mesh
+        geometry={nodes.signNames.geometry}
+        position={nodes.signNames.position}
       ></mesh>
     </>
   );
@@ -488,7 +500,9 @@ export default function Experience() {
 
       <NexusCrystalLoad nodes={nodes} controls={controls} />
 
-      <NamesLoad nodes={nodes} />
+      <NameLoad nodes={nodes} />
+
+      <SignNamesLoad nodes={nodes} />
 
       <PortalsLoad nodes={nodes} controls={controls} />
 
