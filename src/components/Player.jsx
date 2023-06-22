@@ -91,7 +91,7 @@ export default function Player() {
         angularDamping={0.5}
         position={[16, 3.5, 16]}
       >
-        <mesh castShadow>
+        <mesh>
           <boxGeometry args={[1, 2]} />
           <meshStandardMaterial flatShading color={"orange"} />
         </mesh>

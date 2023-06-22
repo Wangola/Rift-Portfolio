@@ -53,11 +53,7 @@ function EnvLoad({ nodes, bakedTexture, bakedExtra, bakedFloor }) {
   return (
     <>
       {/* Load Scene */}
-      <mesh
-        geometry={nodes.baked.geometry}
-        position={nodes.baked.position}
-        receiveShadow
-      >
+      <mesh geometry={nodes.baked.geometry} position={nodes.baked.position}>
         <meshBasicMaterial map={bakedTexture} />
       </mesh>
 
@@ -74,7 +70,6 @@ function EnvLoad({ nodes, bakedTexture, bakedExtra, bakedFloor }) {
       <mesh
         geometry={nodes.floorBaked.geometry}
         position={nodes.floorBaked.position}
-        receiveShadow
       >
         <meshBasicMaterial map={bakedFloor} />
       </mesh>
@@ -90,7 +85,6 @@ function PanelsLoad({ nodes, bakedExtra }) {
         <mesh
           geometry={nodes.frontEndBaked.geometry}
           position={nodes.frontEndBaked.position}
-          castShadow
         >
           <meshBasicMaterial map={bakedExtra} />
         </mesh>
@@ -155,7 +149,6 @@ function NexusCrystalLoad({ nodes, controls }) {
           controls.position.y,
           nodes.nexusCrystal.position.z,
         ]}
-        castShadow
         visible={controls.visible}
       >
         <nexusMaterial ref={nexusMaterialRef} />
