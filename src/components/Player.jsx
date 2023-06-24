@@ -15,10 +15,16 @@ export default function Player() {
   // subscribeKeys (gets key changes) getKeys (gets key states)
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
+  // Used for lerping position and target
   const [smoothedCameraPosition] = useState(
     () => new THREE.Vector3(50, 50, 50)
   );
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
+
+  // Handle camera rotation and offset (initially have a 45 degree angle)
+  const [cameraRotation, setCameraRotation] = useState(Math.PI / 4);
+  const [targetCameraRotation, setTargetCameraRotation] = useState(Math.PI / 4);
+  const cameraDistance = 6; // Adjust this value to control the camera's distance from the object
 
   useFrame((state, delta) => {
     /**
@@ -30,27 +36,54 @@ export default function Player() {
     const torque = { x: 0, y: 0, z: 0 };
 
     // Delta will keep same movement no matter framerate
-    const impulseStrength = 40 * delta;
+    const impulseStrength = 30 * delta;
     const torqueStrength = 20 * delta;
 
+    // Movement Direction represents the direction in which the player should move foward or backwards based on cam position
+    const movementDirection = new THREE.Vector3(
+      Math.sin(cameraRotation),
+      0,
+      Math.cos(cameraRotation)
+    );
+
+    // Given direction it is multiplied to the strength to then sub to impulse applied on object.
     if (forward) {
-      impulse.z -= impulseStrength;
-      // torque.x -= torqueStrength;
+      const forwardImpulse = movementDirection
+        .clone()
+        .multiplyScalar(impulseStrength);
+      impulse.x -= forwardImpulse.x;
+      impulse.z -= forwardImpulse.z;
     }
 
-    if (rightward) {
-      impulse.x += impulseStrength;
-      // torque.z -= torqueStrength;
-    }
-
+    // Given direction it is multiplied to the strength to then add to impulse applied on object.
     if (backward) {
-      impulse.z += impulseStrength;
-      // torque.z += torqueStrength;
+      const backwardImpulse = movementDirection
+        .clone()
+        .multiplyScalar(impulseStrength);
+      impulse.x += backwardImpulse.x;
+      impulse.z += backwardImpulse.z;
     }
 
+    // Given direction mult a perpendicular angle vector and add its impulse
+    if (rightward) {
+      const rightwardImpulse = new THREE.Vector3(
+        -Math.sin(cameraRotation - Math.PI / 2),
+        0,
+        -Math.cos(cameraRotation - Math.PI / 2)
+      ).multiplyScalar(impulseStrength);
+      impulse.x += rightwardImpulse.x;
+      impulse.z += rightwardImpulse.z;
+    }
+
+    // Given direction mult a perpendicular angle vector and sub its impulse
     if (leftward) {
-      impulse.x -= impulseStrength;
-      // torque.z += torqueStrength;
+      const leftwardImpulse = new THREE.Vector3(
+        -Math.sin(cameraRotation + Math.PI / 2),
+        0,
+        -Math.cos(cameraRotation + Math.PI / 2)
+      ).multiplyScalar(impulseStrength);
+      impulse.x += leftwardImpulse.x;
+      impulse.z += leftwardImpulse.z;
     }
 
     body.current.applyImpulse(impulse);
@@ -62,19 +95,41 @@ export default function Player() {
     if (!controls.orbitActive) {
       const bodyPosition = body.current.translation();
 
+      // Set amount of rotation on target needed on L or R movement
+      if (leftward) {
+        setTargetCameraRotation(targetCameraRotation + 0.03); // Increase target rotation angle
+      }
+
+      if (rightward) {
+        setTargetCameraRotation(targetCameraRotation - 0.03); // Decrease target rotation angle
+      }
+
+      // Interpolate camera and its target over time at a fixed refresh rate
+      const newCameraRotation = THREE.MathUtils.lerp(
+        cameraRotation,
+        targetCameraRotation,
+        10 * delta
+      );
+
+      // Update cameraRotation with the newest rotation
+      setCameraRotation(newCameraRotation);
+
+      // Identify camera position based on distance from body and rotation
       const cameraPosition = new THREE.Vector3();
       cameraPosition.copy(bodyPosition);
-      cameraPosition.z += 3.5;
-      cameraPosition.x += 5;
-      cameraPosition.y += 4;
+      cameraPosition.x += Math.sin(newCameraRotation) * cameraDistance;
+      cameraPosition.z += Math.cos(newCameraRotation) * cameraDistance;
+      cameraPosition.y += 4; // Adjust the camera's vertical position if needed
 
-      const cameraTarget = new THREE.Vector3();
-      cameraTarget.copy(bodyPosition);
-      cameraTarget.y -= 0.25;
+      // Set cameraTarget above body for lookAt
+      const cameraTarget = bodyPosition;
+      cameraTarget.y += 1;
 
+      // Interpolate current position with new position over time at a fixed refresh rate ( > 10 is faster movement)
       smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
       smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
 
+      // Update camera
       state.camera.position.copy(smoothedCameraPosition);
       state.camera.lookAt(smoothedCameraTarget);
     }
