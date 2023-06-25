@@ -24,7 +24,7 @@ export default function Player() {
   // Handle camera rotation and offset (initially have a 45 degree angle)
   const [cameraRotation, setCameraRotation] = useState(Math.PI / 4);
   const [targetCameraRotation, setTargetCameraRotation] = useState(Math.PI / 4);
-  const cameraDistance = 6; // Adjust this value to control the camera's distance from the object
+  const cameraDistance = 5; // Adjust this value to control the camera's distance from the object
 
   useFrame((state, delta) => {
     /**
@@ -37,7 +37,7 @@ export default function Player() {
 
     // Delta will keep same movement no matter framerate
     const impulseStrength = 30 * delta;
-    const torqueStrength = 20 * delta;
+    const torqueStrength = 2 * delta;
 
     // Movement Direction represents the direction in which the player should move foward or backwards based on cam position
     const movementDirection = new THREE.Vector3(
@@ -73,6 +73,7 @@ export default function Player() {
       ).multiplyScalar(impulseStrength);
       impulse.x += rightwardImpulse.x;
       impulse.z += rightwardImpulse.z;
+      torque.y -= torqueStrength;
     }
 
     // Given direction mult a perpendicular angle vector and sub its impulse
@@ -84,6 +85,7 @@ export default function Player() {
       ).multiplyScalar(impulseStrength);
       impulse.x += leftwardImpulse.x;
       impulse.z += leftwardImpulse.z;
+      torque.y += torqueStrength;
     }
 
     body.current.applyImpulse(impulse);
