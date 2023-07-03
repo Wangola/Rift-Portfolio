@@ -7,6 +7,7 @@ import Level from "./components/Level";
 import Lights from "./components/Lights";
 import Player from "./components/Player";
 import DebugControls from "./components/DebugControls";
+import Character from "./components/Character";
 
 export default function Experience() {
   const controls = DebugControls();

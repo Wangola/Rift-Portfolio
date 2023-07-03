@@ -6,16 +6,26 @@ import * as THREE from "three";
 
 // Custom Imports
 import DebugControls from "./DebugControls";
+import Character from "./Character";
 
 export default function Player() {
   // Import orbitControls check to remove lock on camera
   const controls = new DebugControls();
-
   const body = useRef();
-  // subscribeKeys (gets key changes) getKeys (gets key states)
+
+  /**
+   * subscribeKeys (gets key changes) getKeys (gets key states)
+   */
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
-  // Used for lerping position and target
+  /**
+   * Handle Animations
+   */
+  const [animationName, setAnimationName] = useState("Idle");
+
+  /**
+   * Used for lerping position and target
+   */
   const [smoothedCameraPosition] = useState(
     () => new THREE.Vector3(50, 50, 50)
   );
@@ -24,13 +34,13 @@ export default function Player() {
   // Handle camera rotation and offset (initially have a 45 degree angle)
   const [cameraRotation, setCameraRotation] = useState(Math.PI / 4);
   const [targetCameraRotation, setTargetCameraRotation] = useState(Math.PI / 4);
-  const cameraDistance = 5; // Adjust this value to control the camera's distance from the object
+  const cameraDistance = 5.5; // Adjust this value to control the camera's distance from the object
 
   useFrame((state, delta) => {
     /**
      * Controls
      */
-    const { forward, backward, leftward, rightward } = getKeys();
+    const { forward, backward, leftward, rightward, shift } = getKeys();
 
     const impulse = { x: 0, y: 0, z: 0 };
     const torque = { x: 0, y: 0, z: 0 };
@@ -46,13 +56,26 @@ export default function Player() {
       Math.cos(cameraRotation)
     );
 
-    // Given direction it is multiplied to the strength to then sub to impulse applied on object.
-    if (forward) {
+    /**
+     * Given direction it is multiplied to the strength to then sub to impulse applied on object.
+     * Handle animations
+     */
+    if (forward && shift) {
       const forwardImpulse = movementDirection
         .clone()
         .multiplyScalar(impulseStrength);
-      impulse.x -= forwardImpulse.x;
-      impulse.z -= forwardImpulse.z;
+      impulse.x -= forwardImpulse.x * 1;
+      impulse.z -= forwardImpulse.z * 1;
+      setAnimationName("Run");
+    } else if (forward) {
+      const forwardImpulse = movementDirection
+        .clone()
+        .multiplyScalar(impulseStrength);
+      impulse.x -= forwardImpulse.x * 0.6;
+      impulse.z -= forwardImpulse.z * 0.6;
+      setAnimationName("Walk");
+    } else {
+      setAnimationName("Idle");
     }
 
     // Given direction it is multiplied to the strength to then add to impulse applied on object.
@@ -60,8 +83,9 @@ export default function Player() {
       const backwardImpulse = movementDirection
         .clone()
         .multiplyScalar(impulseStrength);
-      impulse.x += backwardImpulse.x;
-      impulse.z += backwardImpulse.z;
+      impulse.x += backwardImpulse.x * 0.6;
+      impulse.z += backwardImpulse.z * 0.6;
+      setAnimationName("Walk");
     }
 
     // Given direction mult a perpendicular angle vector and add its impulse
@@ -71,9 +95,10 @@ export default function Player() {
         0,
         -Math.cos(cameraRotation - Math.PI / 2)
       ).multiplyScalar(impulseStrength);
-      impulse.x += rightwardImpulse.x;
-      impulse.z += rightwardImpulse.z;
+      impulse.x += rightwardImpulse.x * 0.6;
+      impulse.z += rightwardImpulse.z * 0.6;
       torque.y -= torqueStrength;
+      setAnimationName("Walk");
     }
 
     // Given direction mult a perpendicular angle vector and sub its impulse
@@ -83,9 +108,10 @@ export default function Player() {
         0,
         -Math.cos(cameraRotation + Math.PI / 2)
       ).multiplyScalar(impulseStrength);
-      impulse.x += leftwardImpulse.x;
-      impulse.z += leftwardImpulse.z;
+      impulse.x += leftwardImpulse.x * 0.6;
+      impulse.z += leftwardImpulse.z * 0.6;
       torque.y += torqueStrength;
+      setAnimationName("Walk");
     }
 
     body.current.applyImpulse(impulse);
@@ -99,11 +125,11 @@ export default function Player() {
 
       // Set amount of rotation on target needed on L or R movement
       if (leftward) {
-        setTargetCameraRotation(targetCameraRotation + 0.03); // Increase target rotation angle
+        setTargetCameraRotation(targetCameraRotation + 0.015); // Increase target rotation angle
       }
 
       if (rightward) {
-        setTargetCameraRotation(targetCameraRotation - 0.03); // Decrease target rotation angle
+        setTargetCameraRotation(targetCameraRotation - 0.015); // Decrease target rotation angle
       }
 
       // Interpolate camera and its target over time at a fixed refresh rate
@@ -146,12 +172,13 @@ export default function Player() {
         friction={1}
         linearDamping={0.5}
         angularDamping={0.5}
-        position={[16, 3.5, 16]}
+        position={[16, 1.7, 16]}
       >
-        <mesh>
+        {/* <mesh>
           <boxGeometry args={[1, 2]} />
           <meshStandardMaterial flatShading color={"orange"} />
-        </mesh>
+        </mesh> */}
+        <Character animationName={animationName} />
       </RigidBody>
     </>
   );
