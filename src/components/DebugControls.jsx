@@ -49,6 +49,11 @@ export default function DebugControls() {
   );
 
   /**
+   * Shader controls
+   */
+  const { temp } = useControls("Shader Controls", {});
+
+  /**
    * Portal color management
    */
   // - Project Portal
@@ -59,7 +64,7 @@ export default function DebugControls() {
     projectDisplacedInt,
     projectPerlinInt,
   } = useControls(
-    "Project Portal",
+    "Shader Controls.Project Portal",
     {
       projectColorStart: "#2EFF2E",
       projectColorEnd: "#00A300",
@@ -78,7 +83,7 @@ export default function DebugControls() {
     gameDisplacedInt,
     gamePerlinInt,
   } = useControls(
-    "Game Portal",
+    "Shader Controls.Game Portal",
     {
       gameColorStart: "#FF2E2E",
       gameColorEnd: "#A30000",
@@ -97,7 +102,7 @@ export default function DebugControls() {
     expDisplacedInt,
     expPerlinInt,
   } = useControls(
-    "Experience Portal",
+    "Shader Controls.Experience Portal",
     {
       expColorStart: "#6bb8eb",
       expColorEnd: "#376796",
@@ -113,7 +118,7 @@ export default function DebugControls() {
    * Crystal ball
    */
   const { crystalColorStart, crystalColorEnd } = useControls(
-    "Crystal Ball",
+    "Shader Controls.Crystal Ball",
     {
       crystalColorStart: "#e8e8e8",
       crystalColorEnd: "#ffde41",
@@ -125,7 +130,7 @@ export default function DebugControls() {
    * Staff Gem
    */
   const { staffColorStart, staffColorEnd } = useControls(
-    "Staff Gem",
+    "Shader Controls.Staff Gem",
     {
       staffColorStart: "#63abf8",
       staffColorEnd: "#e7faff",
@@ -137,7 +142,7 @@ export default function DebugControls() {
    * Candle Fire
    */
   const { candleColorStart, candleColorEnd } = useControls(
-    "Candle Fire",
+    "Shader Controls.Candle Fire",
     {
       candleColorStart: "#FFBF00",
       candleColorEnd: "#FFCC00",
@@ -149,7 +154,7 @@ export default function DebugControls() {
    * Fire Bowl
    */
   const { bowlColor } = useControls(
-    "Bowl Fire",
+    "Shader Controls.Bowl Fire",
     {
       bowlColor: "#ff6000",
     },
