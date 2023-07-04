@@ -23,8 +23,8 @@ export default function Character({ animationName }) {
   return (
     <primitive
       object={character.scene}
-      scale={0.5}
-      //   position={[16, 1.7, 16]}
+      scale={0.45}
+      // position={[16, 1.7, 16]}
       rotation-y={-2.4}
     />
   );

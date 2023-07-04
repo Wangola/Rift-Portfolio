@@ -8,6 +8,7 @@ import Lights from "./components/Lights";
 import Player from "./components/Player";
 import DebugControls from "./components/DebugControls";
 import Character from "./components/Character";
+import Testing from "./components/Testing";
 
 export default function Experience() {
   const controls = DebugControls();
@@ -22,7 +23,8 @@ export default function Experience() {
         {controls.physicsVisible ? <Debug /> : null}
         <Lights />
         <Level />
-        <Player />
+        {/* <Player /> */}
+        <Testing />
       </Physics>
     </>
   );
