@@ -9,6 +9,7 @@ import Player from "./components/Player";
 import DebugControls from "./components/DebugControls";
 import Character from "./components/Character";
 import Testing from "./components/Testing";
+import TestingMov from "./components/TestingMov";
 
 export default function Experience() {
   const controls = DebugControls();
@@ -24,7 +25,8 @@ export default function Experience() {
         <Lights />
         <Level />
         {/* <Player /> */}
-        <Testing />
+        {/* <Testing /> */}
+        <TestingMov />
       </Physics>
     </>
   );
