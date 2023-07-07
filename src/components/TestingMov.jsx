@@ -46,7 +46,7 @@ export default function TestingMov() {
     /**
      * Speed
      */
-    const speed = shift ? 0.06 : 0.03; // Adjust the speed based on whether shift is pressed or not
+    const speed = shift ? 7 : 5; // Adjust the speed based on whether shift is pressed or not
     let newVelocity = { x: 0, y: 0, z: 0 };
 
     // Movement Direction represents the direction in which the player should move forward or backward based on the camera's rotation
@@ -62,65 +62,115 @@ export default function TestingMov() {
     switch (true) {
       case forward && !leftward && !rightward:
         // Handle forward movement (F)
-        newVelocity.x = movementDirection.x * -speed;
-        newVelocity.z = movementDirection.z * -speed;
-        body.current.rotation.y = 0;
+        newVelocity.x = movementDirection.x * -speed * delta;
+        newVelocity.z = movementDirection.z * -speed * delta;
+
+        body.current.rotation.y =
+          Math.atan2(
+            state.camera.position.x - body.current.position.x,
+            state.camera.position.z - body.current.position.z
+          ) +
+          (7 * Math.PI) / 4;
+
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
       case backward && !leftward && !rightward:
         // Handle backward movement (B)
-        newVelocity.x = movementDirection.x * speed;
-        newVelocity.z = movementDirection.z * speed;
-        body.current.rotation.y = Math.PI;
+        newVelocity.x = movementDirection.x * speed * delta;
+        newVelocity.z = movementDirection.z * speed * delta;
+
+        body.current.rotation.y =
+          Math.atan2(
+            state.camera.position.x - body.current.position.x,
+            state.camera.position.z - body.current.position.z
+          ) +
+          (3 * Math.PI) / 4; // Add a rotation of 3π/4 (135 degrees)
+
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
       case leftward && !forward && !backward:
         // Handle leftward movement (L)
-        newVelocity.x = -movementDirection.z * speed;
-        newVelocity.z = movementDirection.x * speed;
-        body.current.rotation.y = Math.PI / 2;
+        newVelocity.x = -movementDirection.z * speed * delta;
+        newVelocity.z = movementDirection.x * speed * delta;
+        body.current.rotation.y =
+          Math.atan2(
+            state.camera.position.x - body.current.position.x,
+            state.camera.position.z - body.current.position.z
+          ) +
+          Math.PI / 4;
+
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
       case rightward && !forward && !backward:
         // Handle rightward movement (R)
-        newVelocity.x = movementDirection.z * speed;
-        newVelocity.z = -movementDirection.x * speed;
-        body.current.rotation.y = (3 * Math.PI) / 2;
+        newVelocity.x = movementDirection.z * speed * delta;
+        newVelocity.z = -movementDirection.x * speed * delta;
+        body.current.rotation.y =
+          Math.atan2(
+            state.camera.position.x - body.current.position.x,
+            state.camera.position.z - body.current.position.z
+          ) +
+          (5 * Math.PI) / 4; // Add a rotation of 5π/4 (225 degrees)
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
       case forward && leftward:
         // Handle simultaneous press of "left" and "forward" buttons (FL)
-        newVelocity.x = (-movementDirection.x - movementDirection.z) * speed;
-        newVelocity.z = (-movementDirection.z + movementDirection.x) * speed;
-        body.current.rotation.y = Math.PI / 4;
+        newVelocity.x =
+          (-movementDirection.x - movementDirection.z) * speed * delta;
+        newVelocity.z =
+          (-movementDirection.z + movementDirection.x) * speed * delta;
+        body.current.rotation.y = Math.atan2(
+          state.camera.position.x - body.current.position.x,
+          state.camera.position.z - body.current.position.z
+        );
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
       case forward && rightward:
         // Handle simultaneous press of "left" and "forward" buttons (FR)
-        newVelocity.x = (movementDirection.x - movementDirection.z) * -speed;
-        newVelocity.z = (movementDirection.z + movementDirection.x) * -speed;
-        body.current.rotation.y = -Math.PI / 4;
+        newVelocity.x =
+          (movementDirection.x - movementDirection.z) * -speed * delta;
+        newVelocity.z =
+          (movementDirection.z + movementDirection.x) * -speed * delta;
+        body.current.rotation.y =
+          Math.atan2(
+            state.camera.position.x - body.current.position.x,
+            state.camera.position.z - body.current.position.z
+          ) +
+          (3 * Math.PI) / 2;
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
       case backward && leftward:
         // Handle simultaneous press of "right" and "backward" buttons (BL)
-        newVelocity.x = (movementDirection.x - movementDirection.z) * speed;
-        newVelocity.z = (movementDirection.z + movementDirection.x) * speed;
-        body.current.rotation.y = (3 * Math.PI) / 4;
+        newVelocity.x =
+          (movementDirection.x - movementDirection.z) * speed * delta;
+        newVelocity.z =
+          (movementDirection.z + movementDirection.x) * speed * delta;
+        body.current.rotation.y =
+          Math.atan2(
+            state.camera.position.x - body.current.position.x,
+            state.camera.position.z - body.current.position.z
+          ) +
+          Math.PI / 2;
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
       case backward && rightward:
         // Handle simultaneous press of "left" and "backward" buttons (BR)
-        newVelocity.x = (-movementDirection.x - movementDirection.z) * -speed;
-        newVelocity.z = (-movementDirection.z + movementDirection.x) * -speed;
-        body.current.rotation.y = -(3 * Math.PI) / 4;
+        newVelocity.x =
+          (-movementDirection.x - movementDirection.z) * -speed * delta;
+        newVelocity.z =
+          (-movementDirection.z + movementDirection.x) * -speed * delta;
+        body.current.rotation.y =
+          Math.atan2(
+            state.camera.position.x - body.current.position.x,
+            state.camera.position.z - body.current.position.z
+          ) + Math.PI;
         setAnimationName(shift ? "Run" : "Walk");
         break;
 
@@ -144,14 +194,23 @@ export default function TestingMov() {
      * Camera
      */
     const bodyPosition = body.current.position;
-    // Interpolate camera and its target over time at a fixed refresh rate
+
+    // Set amount of rotation on target needed on L or R movement
+    if (leftward) {
+      setRotationAngle(rotationAngle + 0.01); // Increase rotation angle
+    }
+
+    if (rightward) {
+      setRotationAngle(rotationAngle - 0.01); // Decrease rotation angle
+    }
+
+    // Update camera
     const cameraRotation = THREE.MathUtils.lerp(
       rotationAngle,
       rotationAngle,
       10 * delta
     );
 
-    // Update camera
     const cameraPosition = new THREE.Vector3();
     cameraPosition.copy(bodyPosition);
     cameraPosition.x += Math.sin(cameraRotation) * cameraDistance;
