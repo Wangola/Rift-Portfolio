@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { RigidBody } from "@react-three/rapier";
 
 // Custom import
+import DebugControls from "./DebugControls";
 import Character from "./CharacterLoad";
 
 /**
@@ -53,6 +54,7 @@ function smoothRotation(currentRotation, targetRotation, rotationSpeed, delta) {
 
 export default function TestingPhysics() {
   // Ref
+  const controls = new DebugControls();
   const body = useRef();
   const character = useRef();
 
@@ -415,34 +417,36 @@ export default function TestingPhysics() {
     /**
      * Camera
      */
-    const bodyPosition = body.current.translation();
+    if (!controls.orbitActive) {
+      const bodyPosition = body.current.translation();
 
-    // Update camera
-    const cameraRotation = THREE.MathUtils.lerp(
-      rotationAngle,
-      rotationAngle,
-      10 * delta
-    );
+      // Update camera
+      const cameraRotation = THREE.MathUtils.lerp(
+        rotationAngle,
+        rotationAngle,
+        10 * delta
+      );
 
-    // Calculate cameras position relative to the body
-    const cameraPosition = new THREE.Vector3();
-    cameraPosition.copy(bodyPosition);
-    cameraPosition.x += Math.sin(cameraRotation) * cameraDistance;
-    cameraPosition.z += Math.cos(cameraRotation) * cameraDistance;
-    cameraPosition.y += 4; // Adjust the camera's vertical position if needed
+      // Calculate cameras position relative to the body
+      const cameraPosition = new THREE.Vector3();
+      cameraPosition.copy(bodyPosition);
+      cameraPosition.x += Math.sin(cameraRotation) * cameraDistance;
+      cameraPosition.z += Math.cos(cameraRotation) * cameraDistance;
+      cameraPosition.y += 4; // Adjust the camera's vertical position if needed
 
-    // Position target slightly above character's body
-    const cameraTarget = new THREE.Vector3();
-    cameraTarget.copy(bodyPosition);
-    cameraTarget.y += 1;
+      // Position target slightly above character's body
+      const cameraTarget = new THREE.Vector3();
+      cameraTarget.copy(bodyPosition);
+      cameraTarget.y += 1;
 
-    // Interpolate current position with new position over time at a fixed refresh rate ( > 10 is faster movement)
-    smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
-    smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
+      // Interpolate current position with new position over time at a fixed refresh rate ( > 10 is faster movement)
+      smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
+      smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
 
-    // Update camera
-    state.camera.position.copy(smoothedCameraPosition);
-    state.camera.lookAt(smoothedCameraTarget);
+      // Update camera
+      state.camera.position.copy(smoothedCameraPosition);
+      state.camera.lookAt(smoothedCameraTarget);
+    }
   });
   return (
     <>
