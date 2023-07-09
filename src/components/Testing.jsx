@@ -9,7 +9,7 @@ import * as THREE from "three";
  */
 
 // Custom imports
-import Character from "./Character";
+import Character from "./CharacterLoad";
 
 export default function Testing() {
   const body = useRef();

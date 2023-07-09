@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 // Custom Imports
 import DebugControls from "./DebugControls";
-import Character from "./Character";
+import Character from "./CharacterLoad";
 
 export default function Player() {
   // Import orbitControls check to remove lock on camera
@@ -173,6 +173,7 @@ export default function Player() {
         linearDamping={0.5}
         angularDamping={0.5}
         position={[16, 1.7, 16]}
+        enabledRotations={[false, false, false]}
       >
         {/* <mesh>
           <boxGeometry args={[1, 2]} />

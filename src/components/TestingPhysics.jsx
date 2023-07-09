@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { RigidBody } from "@react-three/rapier";
 
 // Custom import
 import Character from "./CharacterLoad";
@@ -50,9 +51,10 @@ function smoothRotation(currentRotation, targetRotation, rotationSpeed, delta) {
   return currentRotation + rotationDifference * rotationSpeed * delta;
 }
 
-export default function TestingMov() {
+export default function TestingPhysics() {
   // Ref
   const body = useRef();
+  const character = useRef();
 
   /**
    * Handle Animations
@@ -94,8 +96,8 @@ export default function TestingMov() {
     /**
      * Speed
      */
-    const speed = shift ? 7.5 : 4.5; // Adjust the speed based on whether shift is pressed or not
-    let newVelocity = { x: 0, y: 0, z: 0 };
+    const speed = shift ? 8.5 : 6; // Adjust the speed based on whether shift is pressed or not
+    const impulse = { x: 0, y: 0, z: 0 };
 
     // Movement Direction represents the direction in which the player should move forward or backward based on the camera's rotation
     const movementDirection = new THREE.Vector3(
@@ -112,9 +114,8 @@ export default function TestingMov() {
       case forward && backward:
         {
           // Handle simultaneous press of "left" and "right" buttons
-          newVelocity.x = 0; // No movement in the x-axis
-          newVelocity.z = 0; // No movement in the z-axis
-
+          impulse.x = 0; // No movement in the x-axis
+          impulse.z = 0; // No movement in the z-axis
           // Set animation name to "Idle"
           setAnimationName("Idle");
         }
@@ -124,26 +125,26 @@ export default function TestingMov() {
         (forward && leftward && rightward):
         {
           // Handle forward movement (F)
-          newVelocity.x = movementDirection.x * -speed * delta;
-          newVelocity.z = movementDirection.z * -speed * delta;
+          impulse.x = movementDirection.x * -speed * delta;
+          impulse.z = movementDirection.z * -speed * delta;
 
           // Calc target rotation for forward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             (7 * Math.PI) / 4
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
@@ -155,40 +156,39 @@ export default function TestingMov() {
         (backward && leftward && rightward):
         {
           // Handle backward movement (B)
-          newVelocity.x = movementDirection.x * speed * delta;
-          newVelocity.z = movementDirection.z * speed * delta;
+          impulse.x = movementDirection.x * speed * delta;
+          impulse.z = movementDirection.z * speed * delta;
 
           // Calc target rotation for backward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             (3 * Math.PI) / 4
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
           setAnimationName(shift ? "Run" : "Walk");
         }
-
         break;
 
       // Handle edge case (where both are pressed stops movement)
       case leftward && rightward:
         {
           // Handle simultaneous press of "left" and "right" buttons
-          newVelocity.x = 0; // No movement in the x-axis
-          newVelocity.z = 0; // No movement in the z-axis
+          impulse.x = 0; // No movement in the x-axis
+          impulse.z = 0; // No movement in the z-axis
 
           // Set animation name to "Idle"
           setAnimationName("Idle");
@@ -198,26 +198,26 @@ export default function TestingMov() {
       case leftward && !forward && !backward:
         {
           // Handle leftward movement (L)
-          newVelocity.x = -movementDirection.z * speed * delta;
-          newVelocity.z = movementDirection.x * speed * delta;
+          impulse.x = -movementDirection.z * speed * delta;
+          impulse.z = movementDirection.x * speed * delta;
 
           // Calc target rotation for leftward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             Math.PI / 4
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
@@ -231,26 +231,26 @@ export default function TestingMov() {
       case rightward && !forward && !backward:
         {
           // Handle rightward movement (R)
-          newVelocity.x = movementDirection.z * speed * delta;
-          newVelocity.z = -movementDirection.x * speed * delta;
+          impulse.x = movementDirection.z * speed * delta;
+          impulse.z = -movementDirection.x * speed * delta;
 
           // Calc target rotation for rightward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             (5 * Math.PI) / 4
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
@@ -264,28 +264,28 @@ export default function TestingMov() {
       case forward && leftward:
         {
           // Handle simultaneous press of "left" and "forward" buttons (FL)
-          newVelocity.x =
+          impulse.x =
             (-movementDirection.x - movementDirection.z) * speed * delta;
-          newVelocity.z =
+          impulse.z =
             (-movementDirection.z + movementDirection.x) * speed * delta;
 
           // Calc target rotation for forward && leftward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             0
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
@@ -299,28 +299,28 @@ export default function TestingMov() {
       case forward && rightward:
         {
           // Handle simultaneous press of "left" and "forward" buttons (FR)
-          newVelocity.x =
+          impulse.x =
             (movementDirection.x - movementDirection.z) * -speed * delta;
-          newVelocity.z =
+          impulse.z =
             (movementDirection.z + movementDirection.x) * -speed * delta;
 
           // Calc target rotation for forward && rightward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             (3 * Math.PI) / 2
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
@@ -334,28 +334,28 @@ export default function TestingMov() {
       case backward && leftward:
         {
           // Handle simultaneous press of "right" and "backward" buttons (BL)
-          newVelocity.x =
+          impulse.x =
             (movementDirection.x - movementDirection.z) * speed * delta;
-          newVelocity.z =
+          impulse.z =
             (movementDirection.z + movementDirection.x) * speed * delta;
 
           // Calc target rotation for backward && leftward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             Math.PI / 2
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
@@ -369,28 +369,28 @@ export default function TestingMov() {
       case backward && rightward:
         {
           // Handle simultaneous press of "left" and "backward" buttons (BR)
-          newVelocity.x =
+          impulse.x =
             (-movementDirection.x - movementDirection.z) * -speed * delta;
-          newVelocity.z =
+          impulse.z =
             (-movementDirection.z + movementDirection.x) * -speed * delta;
 
           // Calc target rotation for backward && rightward
           const targetRotation = calculateTargetRotation(
             state.camera.position,
-            body.current.position,
+            body.current.translation(),
             Math.PI
           );
 
           // Interpolate current with target
           const smoothedRotation = smoothRotation(
-            body.current.rotation.y,
+            character.current.rotation.y,
             targetRotation,
             rotationSpeed,
             delta
           );
 
           // Keep the rotation within the range of 0 and 2π
-          body.current.rotation.y =
+          character.current.rotation.y =
             (2 * Math.PI + smoothedRotation) % (2 * Math.PI);
 
           // Set animation name based on movement speed
@@ -403,21 +403,19 @@ export default function TestingMov() {
 
       default:
         // Handle other cases (no movement, etc.)
-        newVelocity.x = 0;
-        newVelocity.z = 0;
+        impulse.x = 0;
+        impulse.z = 0;
         setAnimationName("Idle");
         break;
     }
 
-    // Apply velocity
-    body.current.position.x += newVelocity.x;
-    body.current.position.y += newVelocity.y;
-    body.current.position.z += newVelocity.z;
+    // Apply impulse on character
+    body.current.applyImpulse(impulse);
 
     /**
      * Camera
      */
-    const bodyPosition = body.current.position;
+    const bodyPosition = body.current.translation();
 
     // Update camera
     const cameraRotation = THREE.MathUtils.lerp(
@@ -436,7 +434,7 @@ export default function TestingMov() {
     // Position target slightly above character's body
     const cameraTarget = new THREE.Vector3();
     cameraTarget.copy(bodyPosition);
-    cameraTarget.y += 0.25;
+    cameraTarget.y += 1;
 
     // Interpolate current position with new position over time at a fixed refresh rate ( > 10 is faster movement)
     smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
@@ -448,9 +446,19 @@ export default function TestingMov() {
   });
   return (
     <>
-      <group ref={body} position={[16, 1.7, 16]}>
-        <Character animationName={animationName} />
-      </group>
+      <RigidBody
+        ref={body}
+        colliders="hull"
+        friction={1.25}
+        linearDamping={1.25}
+        angularDamping={1.25}
+        position={[16, 1.7, 16]}
+        enabledRotations={[false, false, false]}
+      >
+        <group ref={character}>
+          <Character animationName={animationName} />
+        </group>
+      </RigidBody>
     </>
   );
 }
