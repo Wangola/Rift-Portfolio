@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { RigidBody } from "@react-three/rapier";
+import { RigidBody, useRapier } from "@react-three/rapier";
 
 // Custom import
 import DebugControls from "./DebugControls";
@@ -59,14 +59,63 @@ export default function TestingPhysics() {
   const character = useRef();
 
   /**
-   * Handle Animations
-   */
-  const [animationName, setAnimationName] = useState("Idle");
-
-  /**
    * subscribeKeys (gets key changes) getKeys (gets key states)
    */
   const [subscribeKeys, getKeys] = useKeyboardControls();
+
+  /**
+   * Raycaster Setup
+   */
+  const { rapier, world } = useRapier();
+  const rapierWorld = world.raw();
+
+  const jump = () => {
+    // Simple jump every 0.55 seconds
+    body.current.applyImpulse({ x: 0, y: 2.5, z: 0 });
+
+    /**
+     * Would of used this raycaster if origin of character was not unknown and loaded mesh
+     * objects were not hollow due to missing faces of face orientation from import.
+     */
+    // const origin = body.current.translation();
+    // origin.y += 0.005;
+    // const direction = { x: 0, y: -1, z: 0 };
+
+    // const ray = new rapier.Ray(origin, direction);
+    // const hit = rapierWorld.castRay(ray, 10, true);
+    // console.log(hit.toi);
+
+    // if (hit.toi < 0.1) {
+    //   body.current.applyImpulse({ x: 0, y: 2.5, z: 0 });
+    // }
+  };
+
+  useEffect(() => {
+    let timer = null;
+
+    const unsubscribeJump = subscribeKeys(
+      (state) => {
+        return state.jump;
+      },
+      (value) => {
+        if (value && !timer) {
+          jump();
+          timer = setTimeout(() => {
+            timer = null;
+          }, 500); // Set cooldown to 0.50 second (500 milliseconds)
+        }
+      }
+    );
+    return () => {
+      clearTimeout(timer);
+      unsubscribeJump();
+    };
+  }, []);
+
+  /**
+   * Handle Animations
+   */
+  const [animationName, setAnimationName] = useState("Idle");
 
   /**
    * Used for lerping position and target
@@ -78,7 +127,7 @@ export default function TestingPhysics() {
 
   // Handle camera and body rotation (initially have a 45 degree angle)
   const [rotationAngle, setRotationAngle] = useState(Math.PI / 4);
-  const cameraDistance = 5.5; // Adjust this value to control the camera's distance from the object
+  const cameraDistance = 5; // Adjust this value to control the camera's distance from the object
 
   /**
    * Handle Character Rotations Speeds
@@ -98,7 +147,7 @@ export default function TestingPhysics() {
     /**
      * Speed
      */
-    const speed = shift ? 9.5 : 7; // Adjust the speed based on whether shift is pressed or not
+    const speed = shift ? 8.5 : 6; // Adjust the speed based on whether shift is pressed or not
     const impulse = { x: 0, y: 0, z: 0 };
 
     // Movement Direction represents the direction in which the player should move forward or backward based on the camera's rotation
@@ -450,19 +499,20 @@ export default function TestingPhysics() {
   });
   return (
     <>
-      <RigidBody
-        ref={body}
-        colliders="hull"
-        friction={1.25}
-        linearDamping={1.25}
-        angularDamping={1.25}
-        position={[16, 1.7, 16]}
-        enabledRotations={[false, false, false]}
-      >
-        <group ref={character}>
-          <Character animationName={animationName} />
-        </group>
-      </RigidBody>
+      <group position={[16, 1.7, 16]}>
+        <RigidBody
+          ref={body}
+          colliders="hull"
+          friction={1.25}
+          linearDamping={1.25}
+          angularDamping={1.25}
+          enabledRotations={[false, false, false]}
+        >
+          <group ref={character}>
+            <Character animationName={animationName} />
+          </group>
+        </RigidBody>
+      </group>
     </>
   );
 }

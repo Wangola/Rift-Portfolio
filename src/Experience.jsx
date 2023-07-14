@@ -5,12 +5,8 @@ import { Physics, Debug } from "@react-three/rapier";
 // Custom imports
 import Level from "./components/Level";
 import Lights from "./components/Lights";
-import Player from "./components/Player";
 import DebugControls from "./components/DebugControls";
-import Character from "./components/CharacterLoad";
-import Testing from "./components/Testing";
-import TestingMov from "./components/TestingMov";
-import TestingPhysics from "./components/TestingPhysics";
+import CharacterMov from "./components/CharacterMov";
 
 export default function Experience() {
   const controls = DebugControls();
@@ -25,10 +21,7 @@ export default function Experience() {
         {controls.physicsVisible ? <Debug /> : null}
         <Lights />
         <Level />
-        {/* <Player /> */}
-        {/* <Testing /> */}
-        {/* <TestingMov /> */}
-        <TestingPhysics />
+        <CharacterMov />
       </Physics>
     </>
   );

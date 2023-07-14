@@ -22,6 +22,7 @@ root.render(
         { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
         { name: "rightward", keys: ["ArrowRight", "KeyD"] },
         { name: "shift", keys: ["Shift"] },
+        { name: "jump", keys: ["Space"] },
       ]}
     >
       <Canvas camera={{ fov: 75, position: [20.5, 5.5, 20.5] }}>

@@ -5,8 +5,8 @@ import { useState, useRef } from "react";
 import * as THREE from "three";
 
 // Custom Imports
-import DebugControls from "./DebugControls";
-import Character from "./CharacterLoad";
+import DebugControls from "../DebugControls";
+import Character from "../CharacterLoad";
 
 export default function Player() {
   // Import orbitControls check to remove lock on camera
