@@ -1,19 +1,36 @@
 import { useRef } from "react";
-import { useHelper } from "@react-three/drei";
+import { useHelper, Sky } from "@react-three/drei";
 import * as THREE from "three";
 
+// Custom Imports
+import DebugControls from "./DebugControls";
+
 export default function Lights() {
-  // const directionalLight = useRef();
-  // useHelper(directionalLight, THREE.DirectionalLightHelper, 10);
+  // Helpers (Uncomment useHelpers if you want to see directionalLights)
+  const directionalLightBehind = useRef();
+  // useHelper(directionalLightBehind, THREE.DirectionalLightHelper, 5);
+
+  const directionalLightFront = useRef();
+  // useHelper(directionalLightFront, THREE.DirectionalLightHelper, 5);
+
+  const controls = new DebugControls();
 
   return (
     <>
       <directionalLight
-        // ref={directionalLight}
-        position={[4, 4, 1]}
-        intensity={1.5}
+        ref={directionalLightBehind}
+        position={[20, 12, 20]}
+        intensity={1.8}
+      />
+
+      <directionalLight
+        ref={directionalLightFront}
+        position={[-10, 12, -10]}
+        intensity={0.5}
       />
       <ambientLight intensity={0.5} />
+
+      {controls.sunVisible ? <Sky sunPosition={controls.sunPosition} /> : null}
     </>
   );
 }

@@ -161,6 +161,15 @@ export default function DebugControls() {
     { collapsed: true }
   );
 
+  const { sunPosition, sunVisible } = useControls(
+    "Sun Position",
+    {
+      sunVisible: true,
+      sunPosition: { value: [1, 0.2, 3] },
+    },
+    { collapsed: true }
+  );
+
   // ----- LEVA/PERF INFO (debug) -----
 
   // Return all the values
@@ -193,5 +202,7 @@ export default function DebugControls() {
     candleColorStart,
     candleColorEnd,
     bowlColor,
+    sunVisible,
+    sunPosition,
   };
 }
