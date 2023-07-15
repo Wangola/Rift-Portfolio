@@ -7,6 +7,7 @@ import { RigidBody, useRapier } from "@react-three/rapier";
 // Custom import
 import DebugControls from "./DebugControls";
 import Character from "./CharacterLoad";
+import useScene from "../stores/useScene";
 
 /**
  * Calculate the target rotation for the body based on the camera and character position.
@@ -62,13 +63,17 @@ export default function TestingPhysics() {
    * subscribeKeys (gets key changes) getKeys (gets key states)
    */
   const [subscribeKeys, getKeys] = useKeyboardControls();
+  // Phases
+  const start = useScene((state) => state.start);
+  const restart = useScene((state) => state.restart);
 
   /**
-   * Raycaster Setup
+   * Raycaster/Phases Setup
    */
   const { rapier, world } = useRapier();
   const rapierWorld = world.raw();
 
+  // Jump
   const jump = () => {
     // Simple jump every 0.55 seconds
     body.current.applyImpulse({ x: 0, y: 2.5, z: 0 });
@@ -90,9 +95,30 @@ export default function TestingPhysics() {
     // }
   };
 
+  const reset = () => {
+    body.current.setTranslation({ x: 16, y: 1.7, z: 16 });
+    body.current.setLinvel({ x: 0, y: 0, z: 0 });
+    body.current.setAngvel({ x: 0, y: 0, z: 0 });
+    setRotationAngle(Math.PI / 4);
+  };
+
+  /**
+   * Selector for subscribeKeys used for Jump press and Phases
+   */
   useEffect(() => {
     let timer = null;
 
+    // Defining phase
+    const unsubscribeReset = useScene.subscribe(
+      (state) => state.phase,
+      (phase) => {
+        if (phase == "ready") {
+          reset();
+        }
+      }
+    );
+
+    // Jumping
     const unsubscribeJump = subscribeKeys(
       (state) => {
         return state.jump;
@@ -106,9 +132,17 @@ export default function TestingPhysics() {
         }
       }
     );
+
+    // Phase Handler
+    const unsubscribeAny = subscribeKeys(() => {
+      start();
+    });
+
     return () => {
       clearTimeout(timer);
+      unsubscribeReset();
       unsubscribeJump();
+      unsubscribeAny();
     };
   }, []);
 
@@ -463,12 +497,13 @@ export default function TestingPhysics() {
     // Apply impulse on character
     body.current.applyImpulse(impulse);
 
+    // Body position for both Camera and phases
+    const bodyPosition = body.current.translation();
+
     /**
      * Camera
      */
     if (!controls.orbitActive) {
-      const bodyPosition = body.current.translation();
-
       // Update camera
       const cameraRotation = THREE.MathUtils.lerp(
         rotationAngle,
@@ -495,6 +530,13 @@ export default function TestingPhysics() {
       // Update camera
       state.camera.position.copy(smoothedCameraPosition);
       state.camera.lookAt(smoothedCameraTarget);
+    }
+
+    /**
+     * Phases
+     */
+    if (bodyPosition.y < -2) {
+      restart();
     }
   });
   return (
