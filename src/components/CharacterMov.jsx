@@ -155,7 +155,7 @@ export default function TestingPhysics() {
    * Used for lerping position and target
    */
   const [smoothedCameraPosition] = useState(
-    () => new THREE.Vector3(50, 50, 50)
+    () => new THREE.Vector3(-125, -125, -125)
   );
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
 
@@ -181,7 +181,7 @@ export default function TestingPhysics() {
     /**
      * Speed
      */
-    const speed = shift ? 8.5 : 6; // Adjust the speed based on whether shift is pressed or not
+    const speed = shift ? 9.5 : 7; // Adjust the speed based on whether shift is pressed or not
     const impulse = { x: 0, y: 0, z: 0 };
 
     // Movement Direction represents the direction in which the player should move forward or backward based on the camera's rotation
@@ -524,8 +524,8 @@ export default function TestingPhysics() {
       cameraTarget.y += 1;
 
       // Interpolate current position with new position over time at a fixed refresh rate ( > 10 is faster movement)
-      smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
-      smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
+      smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
+      smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
 
       // Update camera
       state.camera.position.copy(smoothedCameraPosition);

@@ -20,7 +20,7 @@ export default function Lights() {
       <directionalLight
         ref={directionalLightBehind}
         position={[20, 12, 20]}
-        intensity={1.8}
+        intensity={1.2}
       />
 
       <directionalLight

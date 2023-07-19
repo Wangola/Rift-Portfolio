@@ -1,10 +1,148 @@
-html,
-body,
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap");
+
 #root {
+  width: 100vw;
+  height: 100vh;
+  background-color: #bef5e4;
+  background-image: linear-gradient(147deg, #7b7b6a 40%, #1e9700 100%);
+}
+
+body {
+  margin: 0;
+}
+
+/* 
+  Loading Screen format
+*/
+.loadingScreen {
   position: fixed;
   top: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: inherit;
+  background-image: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 6s;
+  z-index: 1;
+  font-family: "Almendra", serif;
+}
+
+.loadingScreen-started {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 
+  Header format
+*/
+.loadingScreen_content {
+  margin-bottom: 20px;
+}
+
+.loadingScreen_block {
+  padding: 50px;
+  background-color: #f5f5dc;
+  border-radius: 24px;
+  text-align: center;
+  border: solid 6px #808080;
+  transition: opacity 0.4s;
+  flex: 1;
+}
+
+.loadingScreen_title {
+  font-size: 2.5rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
+
+/* 
+  Controls grid format 
+*/
+.loadingScreen_gridBlock {
+  padding: 25px;
+  background-color: #f5f5dc;
+  border-radius: 12px;
+  text-align: center;
+  border: groove 6px #808080;
+  transition: opacity 0.4s;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.loadingScreen_grid {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 10px;
+}
+
+.loadingScreen_grid_row {
+  display: grid;
+  grid-template-columns: auto;
+}
+
+.loadingScreen_grid_cell {
+  font-size: 1.2rem;
+}
+
+/*
+  Button format
+*/
+.loadingScreen_button {
+  padding: 8px 32px;
+  background-color: rgba(0, 0, 0, 0.24);
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  transition: opacity 0.4s;
+  font-family: "Almendra", serif;
+  margin-top: 20px;
+}
+
+.loadingScreen_button:hover {
+  background-color: rgba(0, 0, 0, 0.42);
+  cursor: pointer;
+}
+
+.loadingScreen_button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 
+  Loading progress format 
+*/
+.loadingScreen_progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  height: 12px;
+}
+
+.loadingScreen_progress_value {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgb(0 0 0 / 50%);
+  transition: width 0.4s;
+}
+
+/* Transion started state */
+.loadingScreen-started .loadingScreen_block {
+  opacity: 0;
+}
+
+.loadingScreen-started .loadingScreen_gridBlock {
+  opacity: 0;
+}
+
+.loadingScreen-started .loadingScreen_button {
+  opacity: 0;
 }
