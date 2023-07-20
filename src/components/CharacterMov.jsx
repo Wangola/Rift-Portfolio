@@ -53,7 +53,7 @@ function smoothRotation(currentRotation, targetRotation, rotationSpeed, delta) {
   return currentRotation + rotationDifference * rotationSpeed * delta;
 }
 
-export default function TestingPhysics() {
+export default function CharacterMov() {
   // Ref
   const controls = new DebugControls();
   const body = useRef();
@@ -154,8 +154,11 @@ export default function TestingPhysics() {
   /**
    * Used for lerping position and target
    */
+
+  const [cameraSpeed, setCameraSpeed] = useState(1);
+
   const [smoothedCameraPosition] = useState(
-    () => new THREE.Vector3(-125, -125, -125)
+    () => new THREE.Vector3(25, 10, 25)
   );
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
 
@@ -203,6 +206,8 @@ export default function TestingPhysics() {
           impulse.z = 0; // No movement in the z-axis
           // Set animation name to "Idle"
           setAnimationName("Idle");
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -234,6 +239,9 @@ export default function TestingPhysics() {
 
           // Set animation name based on movement speed
           setAnimationName(shift ? "Run" : "Walk");
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -265,6 +273,9 @@ export default function TestingPhysics() {
 
           // Set animation name based on movement speed
           setAnimationName(shift ? "Run" : "Walk");
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -277,6 +288,9 @@ export default function TestingPhysics() {
 
           // Set animation name to "Idle"
           setAnimationName("Idle");
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -310,6 +324,9 @@ export default function TestingPhysics() {
 
           // Apply left camera rotation using cameraTurnSpeed [+ for left]
           setRotationAngle(rotationAngle + cameraTurnSpeed);
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -343,6 +360,9 @@ export default function TestingPhysics() {
 
           // Apply right camera rotation using cameraTurnSpeed [- for right]
           setRotationAngle(rotationAngle - cameraTurnSpeed);
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -378,6 +398,9 @@ export default function TestingPhysics() {
 
           // Apply left camera rotation using cameraTurnSpeed [+ for left]
           setRotationAngle(rotationAngle + cameraTurnSpeed);
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -413,6 +436,9 @@ export default function TestingPhysics() {
 
           // Apply right camera rotation using cameraTurnSpeed [- for right]
           setRotationAngle(rotationAngle - cameraTurnSpeed);
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -448,6 +474,9 @@ export default function TestingPhysics() {
 
           // Apply left camera rotation using cameraTurnSpeed [+ for left]
           setRotationAngle(rotationAngle + cameraTurnSpeed);
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -483,6 +512,9 @@ export default function TestingPhysics() {
 
           // Apply right camera rotation using cameraTurnSpeed [- for right]
           setRotationAngle(rotationAngle - cameraTurnSpeed);
+
+          // Update cameraSpeed on move.
+          setCameraSpeed(10);
         }
         break;
 
@@ -524,8 +556,8 @@ export default function TestingPhysics() {
       cameraTarget.y += 1;
 
       // Interpolate current position with new position over time at a fixed refresh rate ( > 10 is faster movement)
-      smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
-      smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
+      smoothedCameraPosition.lerp(cameraPosition, cameraSpeed * delta);
+      smoothedCameraTarget.lerp(cameraTarget, cameraSpeed * delta);
 
       // Update camera
       state.camera.position.copy(smoothedCameraPosition);
