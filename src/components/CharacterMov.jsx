@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { RigidBody, useRapier } from "@react-three/rapier";
+import { RigidBody } from "@react-three/rapier";
 
 // Custom import
 import DebugControls from "./DebugControls";
@@ -70,8 +70,8 @@ export default function CharacterMov() {
   /**
    * Raycaster/Phases Setup
    */
-  const { rapier, world } = useRapier();
-  const rapierWorld = world.raw();
+  // const { rapier, world } = useRapier();
+  // const rapierWorld = world.raw();
 
   // Jump
   const jump = () => {

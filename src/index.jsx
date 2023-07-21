@@ -6,7 +6,8 @@ import { KeyboardControls, Loader } from "@react-three/drei";
 // Custom imports
 import { Leva } from "leva";
 import { StrictMode } from "react";
-import App from "./App";
+import Experience from "./Experience";
+import { Canvas } from "@react-three/fiber";
 
 const root = createRoot(document.querySelector("#root"));
 
@@ -24,7 +25,9 @@ root.render(
         { name: "jump", keys: ["Space"] },
       ]}
     >
-      <App />
+      <Canvas camera={{ fov: 75 }}>
+        <Experience />
+      </Canvas>
     </KeyboardControls>
   </StrictMode>
 );
