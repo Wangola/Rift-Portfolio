@@ -440,14 +440,39 @@ function BowlsLoad({ nodes, nodeNames, controls }) {
   );
 }
 
-export default function Level({
-  nodes,
-  nodeNames,
-  controls,
-  bakedTexture,
-  bakedFloor,
-  bakedExtra,
-}) {
+export default function Level() {
+  /**
+   * Loading Process
+   */
+  // Destructure model load
+  const { nodes } = useGLTF("./model/baked.glb");
+
+  // Initializing Control Function (Any leva value needed will begin with controls.)
+  const controls = DebugControls();
+
+  // Loads textures
+  const bakedTexture = useTexture("./model/baked.jpg");
+  bakedTexture.flipY = false;
+  const bakedFloor = useTexture("./model/bakedFloor.jpg");
+  bakedFloor.flipY = false;
+  const bakedExtra = useTexture("./model/bakedExtra.jpg");
+  bakedExtra.flipY = false;
+
+  /**
+   * Node Extraction
+   */
+  // Dynamically add emissions objects into scene (specify include name for group).
+  const nodeNames = [];
+
+  // Looping through the nodes property
+  for (const nodeName in nodes) {
+    if (nodes.hasOwnProperty(nodeName)) {
+      const node = nodes[nodeName];
+      if (node.isMesh && nodeName !== "baked" && nodeName !== "floorBaked") {
+        nodeNames.push(nodeName);
+      }
+    }
+  }
   return (
     <>
       <color args={[controls.backgroundColor]} attach={"background"} />
