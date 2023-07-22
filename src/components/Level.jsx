@@ -398,7 +398,7 @@ function BowlsLoad({ nodes, nodeNames, controls }) {
   const bowlMaterialRefs = useRef([]);
 
   // Update bowlMaterial property's with Leva control changes
-  React.useEffect(() => {
+  useEffect(() => {
     bowlMaterialRefs.current.forEach(({ material, properties }) => {
       material.current.uColor.set(properties.bowlColor);
     });

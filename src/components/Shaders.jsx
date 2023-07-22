@@ -14,6 +14,8 @@ import staffVertexShader from "../shaders/staffGem/vertex.glsl";
 import staffFragmentShader from "../shaders/staffGem/fragment.glsl";
 import bowlVertexShader from "../shaders/fireBowl/vertex.glsl";
 import bowlFragmentShader from "../shaders/fireBowl/fragment.glsl";
+import backgroundVertexShader from "../shaders/backgroundShader/vertex.glsl";
+import backgroundFragmentShader from "../shaders/backgroundShader/fragment.glsl";
 
 // Custom Shaders
 const NexusMaterial = shaderMaterial(
@@ -106,6 +108,16 @@ const BowlMaterial = shaderMaterial(
   bowlFragmentShader
 );
 
+const BackgroundMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColorStart: new THREE.Color(),
+    uColorEnd: new THREE.Color(),
+  },
+  backgroundVertexShader,
+  backgroundFragmentShader
+);
+
 // Exporting shader materials
 export {
   NexusMaterial,
@@ -116,4 +128,5 @@ export {
   StaffGemMaterial,
   CandleMaterial,
   BowlMaterial,
+  BackgroundMaterial,
 };

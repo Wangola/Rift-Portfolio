@@ -169,8 +169,15 @@ export default function DebugControls() {
     },
     { collapsed: true }
   );
-
   // ----- LEVA/PERF INFO (debug) -----
+
+  /**
+   * Values not used in LEVA but used for tracking in useEffect
+   */
+  const { backgroundColorStart, backgroundColorEnd } = {
+    backgroundColorStart: "#1e9800",
+    backgroundColorEnd: "#7E7E91",
+  };
 
   // Return all the values
   return {
@@ -204,5 +211,7 @@ export default function DebugControls() {
     bowlColor,
     sunVisible,
     sunPosition,
+    backgroundColorStart,
+    backgroundColorEnd,
   };
 }

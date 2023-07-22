@@ -1,14 +1,116 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
 #root {
   width: 100vw;
   height: 100vh;
-  background-color: #bef5e4;
-  background-image: linear-gradient(147deg, #7b7b6a 40%, #1e9700 100%);
+  /* background-color: #bef5e4;
+  background-image: linear-gradient(147deg, #7b7b6a 40%, #1e9700 100%); */
 }
 
 body {
   margin: 0;
+}
+
+/*
+  New format
+*/
+/* Intro text */
+.intro-text {
+  font-size: 4rem;
+  color: #f5f5dc;
+  opacity: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  width: fit-content;
+  transition: opacity 2s;
+  font-family: "Bebas Neue", sans-serif;
+
+  animation: floatingAnimation 8s infinite;
+}
+
+/* 
+  Movement controls 
+*/
+
+/* Parent container */
+.controls-container-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movement-controls {
+  padding: 25px;
+  background-color: #f5f5dc;
+  border-radius: 12px;
+  text-align: center;
+  border: groove 6px #808080;
+  transition: opacity 0.4s;
+  width: fit-content;
+  margin-bottom: 20px;
+
+  opacity: 1;
+  transition: opacity 3s;
+
+  white-space: nowrap;
+}
+
+.controls-container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 10px;
+}
+
+.controls-row {
+  display: grid;
+  grid-template-columns: auto;
+}
+
+.controls-cell {
+  font-size: 1.2rem;
+}
+
+/* Button */
+.intro-button {
+  padding: 8px 30px;
+  background-color: rgba(0, 0, 0, 0.24);
+  color: #f5f5dc;
+  border: none;
+  font-weight: bold;
+  font-size: 1.8rem;
+  font-family: "Bebas Neue", sans-serif;
+  border-radius: 8px;
+  margin-top: 40px;
+
+  cursor: pointer;
+
+  opacity: 1;
+  transition: opacity 3s;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+/* 
+  Animation
+*/
+@keyframes floatingAnimation {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-10px) translateX(-2px);
+  }
+  50% {
+    transform: translateY(0) translateX(0);
+  }
+  75% {
+    transform: translateY(-8px) translateX(2px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
 }
 
 /* 
