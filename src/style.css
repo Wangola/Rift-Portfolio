@@ -3,8 +3,8 @@
 #root {
   width: 100vw;
   height: 100vh;
-  /* background-color: #bef5e4;
-  background-image: linear-gradient(147deg, #7b7b6a 40%, #1e9700 100%); */
+  background-color: #bef5e4;
+  background-image: linear-gradient(147deg, #7b7b6a 40%, #1e9700 100%);
 }
 
 body {
@@ -174,7 +174,7 @@ body {
   flex-direction: column;
   transition: opacity 6s;
   z-index: 1;
-  font-family: "Almendra", serif;
+  font-family: "Bebas Neue", sans-serif;
 }
 
 .loadingScreen-started {

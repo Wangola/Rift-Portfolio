@@ -13,7 +13,7 @@ extend({
   BackgroundMaterial,
 });
 
-export default function LoadingTest({ onStarted }) {
+export default function IntroScreen({ onStarted }) {
   // Initializing Control Function (Any leva value needed will begin with controls.)
   const controls = DebugControls();
 
