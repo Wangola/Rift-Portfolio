@@ -3,8 +3,8 @@ import { Html } from "@react-three/drei";
 import { extend, useFrame, useThree } from "@react-three/fiber";
 
 // Custom imports
-import { BackgroundMaterial } from "./Shaders";
-import DebugControls from "./DebugControls";
+import { BackgroundMaterial } from "../Shaders";
+import DebugControls from "../DebugControls";
 
 /**
  * Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
@@ -13,7 +13,7 @@ extend({
   BackgroundMaterial,
 });
 
-export default function IntroScreen({ onStarted }) {
+export default function IntroScreenTest({ onStarted }) {
   // Initializing Control Function (Any leva value needed will begin with controls.)
   const controls = DebugControls();
 

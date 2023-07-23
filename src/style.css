@@ -174,7 +174,7 @@ body {
   flex-direction: column;
   transition: opacity 6s;
   z-index: 1;
-  font-family: "Bebas Neue", sans-serif;
+  font-family: "Almendra", serif;
 }
 
 .loadingScreen-started {

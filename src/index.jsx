@@ -25,9 +25,7 @@ root.render(
         { name: "jump", keys: ["Space"] },
       ]}
     >
-      <Canvas camera={{ fov: 75 }}>
-        <Experience />
-      </Canvas>
+      <Experience />
     </KeyboardControls>
   </StrictMode>
 );

@@ -1,52 +1,55 @@
-import { useProgress } from "@react-three/drei";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../style.css";
 
 export default function LoadingScreen({ started, onStarted }) {
-  const { progress } = useProgress();
+  /**
+   * Handle intro text
+   */
+  const [introCompleted, setIntroCompleted] = useState(false);
+
+  // Function to handle the intro animation completion
+  const handleIntroAnimationComplete = () => {
+    setIntroCompleted(true);
+  };
+
+  // Function to start the intro animation with a delay of 2.5 second
+  useEffect(() => {
+    const timer = setTimeout(handleIntroAnimationComplete, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  /**
+   * Handle Spawn info
+   */
+  const [showSpawn, setShowSpawn] = useState(true);
+
+  const handleStartClick = () => {
+    setShowSpawn(false);
+
+    onStarted(); // Call the onStarted prop to transition to the rest of the experience
+  };
 
   return (
-    <div className={`loadingScreen ${started ? "loadingScreen-started" : ""}`}>
-      <div className="loadingScreen_content">
-        <div className="loadingScreen_block">
-          <h1 className="loadingScreen_title"> Movement Controls</h1>
-        </div>
-      </div>
-      <div className="loadingScreen_gridBlock">
-        <div className="loadingScreen_grid">
-          <div className="loadingScreen_grid_row">
-            <div className="loadingScreen_grid_cell">W - Forward</div>
-          </div>
-          <div className="loadingScreen_grid_row">
-            <div className="loadingScreen_grid_cell">S - Backward</div>
-          </div>
-          <div className="loadingScreen_grid_row">
-            <div className="loadingScreen_grid_cell">A - Left</div>
-          </div>
-          <div className="loadingScreen_grid_row">
-            <div className="loadingScreen_grid_cell">D - Right</div>
-          </div>
-          <div className="loadingScreen_grid_row">
-            <div className="loadingScreen_grid_cell">Shift - Run</div>
-          </div>
-          <div className="loadingScreen_grid_row">
-            <div className="loadingScreen_grid_cell">Spacebar - Jump</div>
-          </div>
-        </div>
-      </div>
-      <button
-        className="loadingScreen_button"
-        disabled={progress === 100}
-        onClick={onStarted}
+    <>
+      <div
+        className={`loadingScreen ${started ? "loadingScreen-started" : ""}`}
       >
-        Spawn
-      </button>
-      <div className="loadingScreen_progress">
-        <div
-          className="loadingScreen_progress_value"
-          style={{ width: `${progress}%` }}
-        />
+        {/* "Welcome to my Portfolio" text (if completed hide) else stay*/}
+        <div className={`intro-text ${introCompleted ? "hidden" : ""}`}>
+          Welcome to my Portfolio!
+        </div>
+
+        <>
+          <div
+            className={`controls-container-wrapper ${
+              introCompleted ? "" : "hidden"
+            }`}
+          >
+            {/* Spawn button */}
+            <button onClick={handleStartClick}>Spawn</button>
+          </div>
+        </>
       </div>
-    </div>
+    </>
   );
 }
