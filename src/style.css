@@ -16,14 +16,14 @@ body {
 */
 /* Intro text */
 .intro-text {
+  font-family: "Bebas Neue", sans-serif;
   font-size: 4rem;
   color: #f5f5dc;
   opacity: 1;
   white-space: nowrap;
   overflow: hidden;
   width: fit-content;
-  transition: opacity 2s;
-  font-family: "Bebas Neue", sans-serif;
+  transition: opacity 1s ease-out;
 
   animation: floatingAnimation 8s infinite;
 }
@@ -32,33 +32,46 @@ body {
   Movement controls 
 */
 
+.movement-text {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.5rem;
+  color: #f5f5dc;
+  opacity: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  width: fit-content;
+  transition: opacity 2s;
+
+  animation: floatingAnimation 3s infinite;
+}
+
 /* Parent container */
 .controls-container-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: "Bebas Neue", sans-serif;
+
+  opacity: 1;
+  transition: opacity 3s;
 }
 
 .movement-controls {
-  padding: 25px;
+  padding: 35px;
   background-color: #f5f5dc;
   border-radius: 12px;
   text-align: center;
   border: groove 6px #808080;
-  transition: opacity 0.4s;
   width: fit-content;
-  margin-bottom: 20px;
-
-  opacity: 1;
-  transition: opacity 3s;
 
   white-space: nowrap;
 }
 
 .controls-container {
   display: grid;
-  grid-template-columns: auto;
-  grid-gap: 10px;
+  grid-template-columns: repeat(2, auto); /* Set 3 columns */
+  grid-template-rows: repeat(3, auto); /* Set 2 rows */
+  grid-gap: 50px;
 }
 
 .controls-row {
@@ -68,6 +81,36 @@ body {
 
 .controls-cell {
   font-size: 1.2rem;
+  opacity: 0;
+  transition: opacity 3s ease-in;
+}
+
+.controls-row:nth-child(1) .controls-cell {
+  transition-delay: 0s;
+}
+
+.controls-row:nth-child(2) .controls-cell {
+  transition-delay: 1.5s;
+}
+
+.controls-row:nth-child(3) .controls-cell {
+  transition-delay: 3s;
+}
+
+.controls-row:nth-child(4) .controls-cell {
+  transition-delay: 4.5s;
+}
+
+.controls-row:nth-child(5) .controls-cell {
+  transition-delay: 6s;
+}
+
+.controls-row:nth-child(6) .controls-cell {
+  transition-delay: 7.5s;
+}
+
+.controls-cell.active {
+  opacity: 1;
 }
 
 /* Button */
@@ -86,6 +129,7 @@ body {
 
   opacity: 1;
   transition: opacity 3s;
+  transition-delay: 9s;
 }
 
 .hidden {

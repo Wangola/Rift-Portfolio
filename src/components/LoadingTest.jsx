@@ -18,6 +18,22 @@ export default function LoadingTest({ onStarted }) {
   const controls = DebugControls();
 
   /**
+   * Handle intro text
+   */
+  const [introCompleted, setIntroCompleted] = useState(false);
+
+  // Function to handle the intro animation completion
+  const handleIntroAnimationComplete = () => {
+    setIntroCompleted(true);
+  };
+
+  // Function to start the intro animation with a delay of 2.5 second
+  useEffect(() => {
+    const timer = setTimeout(handleIntroAnimationComplete, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  /**
    * Handle Spawn info
    */
   const [showSpawn, setShowSpawn] = useState(true);
@@ -27,24 +43,6 @@ export default function LoadingTest({ onStarted }) {
 
     onStarted(); // Call the onStarted prop to transition to the rest of the experience
   };
-
-  /**
-   * Handle intro text
-   */
-  const [introCompleted, setIntroCompleted] = useState(false);
-  const [showIntroText, setShowIntroText] = useState(false);
-
-  // Function to handle the intro animation completion
-  const handleIntroAnimationComplete = () => {
-    setIntroCompleted(true);
-    setShowIntroText(true);
-  };
-
-  // Function to start the intro animation with a delay of 2.5 second
-  useEffect(() => {
-    const timer = setTimeout(handleIntroAnimationComplete, 2500);
-    return () => clearTimeout(timer);
-  }, []);
 
   /**
    * Shader material information
@@ -88,47 +86,83 @@ export default function LoadingTest({ onStarted }) {
 
       <Html center>
         {/* Intructions (if completed show) else hide*/}
-        {showSpawn && (
-          <>
-            <div
-              className={`controls-container-wrapper ${
-                introCompleted ? "" : "hidden"
-              }`}
-            >
-              {/* Movement controls box */}
-              <div className={`movement-controls`}>
-                <div className="controls-container">
-                  <div className="controls-row">
-                    <div className="controls-cell">W - Forward</div>
+
+        <>
+          <div
+            className={`controls-container-wrapper ${
+              introCompleted ? "" : "hidden"
+            }`}
+          >
+            <div className="movement-text">Movement Controls</div>
+            {/* Movement controls box */}
+            <div className={`movement-controls`}>
+              <div className="controls-container">
+                <div className="controls-row">
+                  <div
+                    className={`controls-cell ${
+                      introCompleted ? "active" : ""
+                    }`}
+                  >
+                    W - Forward
                   </div>
-                  <div className="controls-row">
-                    <div className="controls-cell">S - Backward</div>
+                </div>
+                <div className="controls-row">
+                  <div
+                    className={`controls-cell ${
+                      introCompleted ? "active" : ""
+                    }`}
+                  >
+                    S - Backward
                   </div>
-                  <div className="controls-row">
-                    <div className="controls-cell">A - Left</div>
+                </div>
+                <div className="controls-row">
+                  <div
+                    className={`controls-cell ${
+                      introCompleted ? "active" : ""
+                    }`}
+                  >
+                    A - Left
                   </div>
-                  <div className="controls-row">
-                    <div className="controls-cell">D - Right</div>
+                </div>
+                <div className="controls-row">
+                  <div
+                    className={`controls-cell ${
+                      introCompleted ? "active" : ""
+                    }`}
+                  >
+                    D - Right
                   </div>
-                  <div className="controls-row">
-                    <div className="controls-cell">Shift - Run</div>
+                </div>
+                <div className="controls-row">
+                  <div
+                    className={`controls-cell ${
+                      introCompleted ? "active" : ""
+                    }`}
+                  >
+                    Shift - Run
                   </div>
-                  <div className="controls-row">
-                    <div className="controls-cell">Spacebar - Jump</div>
+                </div>
+                <div className="controls-row">
+                  <div
+                    className={`controls-cell ${
+                      introCompleted ? "active" : ""
+                    }`}
+                  >
+                    Spacebar - Jump
                   </div>
                 </div>
               </div>
-
-              {/* Spawn button */}
-              <button
-                className={`intro-button ${introCompleted ? "" : "hidden"}`}
-                onClick={handleStartClick}
-              >
-                Spawn
-              </button>
             </div>
-          </>
-        )}
+
+            {/* Spawn button */}
+            <button
+              className={`intro-button ${introCompleted ? "" : "hidden"}`}
+              onClick={handleStartClick}
+            >
+              Spawn
+            </button>
+          </div>
+        </>
       </Html>
     </group>
   );
