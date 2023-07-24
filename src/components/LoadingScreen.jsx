@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../style.css";
+import { useProgress } from "@react-three/drei";
 
 export default function LoadingScreen({ started, onStarted }) {
+  const { progress } = useProgress();
+
   /**
    * Handle intro text
    */
@@ -112,6 +115,14 @@ export default function LoadingScreen({ started, onStarted }) {
             </button>
           </div>
         </>
+
+        {/* Loading progress bar */}
+        <div className="loadingScreen_progress">
+          <div
+            className="loadingScreen_progress_value"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
       </div>
     </>
   );
