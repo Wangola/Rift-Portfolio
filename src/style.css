@@ -23,8 +23,10 @@ body {
   white-space: nowrap;
   overflow: hidden;
   width: fit-content;
-  transition: opacity 1s ease-out;
 
+  position: fixed;
+
+  transition: opacity 1s ease-out;
   animation: floatingAnimation 8s infinite;
 }
 
@@ -40,8 +42,8 @@ body {
   white-space: nowrap;
   overflow: hidden;
   width: fit-content;
-  transition: opacity 2s;
 
+  transition: opacity 2s ease-out;
   animation: floatingAnimation 3s infinite;
 }
 
@@ -127,9 +129,19 @@ body {
 
   cursor: pointer;
 
-  opacity: 1;
+  /* opacity: 1; */
   transition: opacity 3s;
   transition-delay: 9s;
+}
+
+.intro-button:hover {
+  background-color: rgba(0, 0, 0, 0.52);
+  cursor: pointer;
+}
+
+.intro-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .hidden {
