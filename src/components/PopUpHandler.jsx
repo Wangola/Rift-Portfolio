@@ -1,5 +1,5 @@
 import { Html, useKeyboardControls } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import React, { useRef, useState } from "react";
 import * as THREE from "three";
 import { Vector3 } from "three";
@@ -33,13 +33,12 @@ export default function PopUpHandler({
   /**
    * Handle Camera Positions
    */
-
-  // Handle E press to update the camera position
+  // Handle E press on skills to update the camera position
   const handleSkillPress = (delta) => {
     // Define the new camera position
     const newCameraPosition = new THREE.Vector3(
       positionLeft.x + 7.5,
-      positionLeft.y + 1, // Adjust this value to set the camera height
+      positionLeft.y + 1.8, // Adjust this value to set the camera height
       positionLeft.z
     );
 
@@ -51,12 +50,6 @@ export default function PopUpHandler({
     // Set interaction as pressed to stop camera movement until character moves again
     setInteractionActive(true);
   };
-
-  // Testing
-  /**
-   * State to keep track of "E" press
-   */
-  const [ePressed, setEPressed] = useState(false);
 
   useFrame((state, delta) => {
     // If loading bodyPosition return
@@ -108,7 +101,6 @@ export default function PopUpHandler({
      * Handle E press on skills
      */
     if (showPopUp && interact) {
-      console.log("nice click");
       handleSkillPress(delta);
     }
   });
