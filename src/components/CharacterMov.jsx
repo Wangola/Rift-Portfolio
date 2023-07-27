@@ -8,6 +8,7 @@ import { RigidBody } from "@react-three/rapier";
 import DebugControls from "./DebugControls";
 import Character from "./CharacterLoad";
 import useScene from "../stores/useScene";
+import PopUpHandler from "./PopUpHandler";
 
 /**
  * Calculate the target rotation for the body based on the camera and character position.
@@ -53,7 +54,7 @@ function smoothRotation(currentRotation, targetRotation, rotationSpeed, delta) {
   return currentRotation + rotationDifference * rotationSpeed * delta;
 }
 
-export default function CharacterMov() {
+export default function CharacterMov({ nodes }) {
   // Ref
   const controls = new DebugControls();
   const body = useRef();
@@ -63,6 +64,10 @@ export default function CharacterMov() {
    * subscribeKeys (gets key changes) getKeys (gets key states)
    */
   const [subscribeKeys, getKeys] = useKeyboardControls();
+
+  // Validate is "E" has been pressed in PopUpHandler
+  const [interactionActive, setInteractionActive] = useState(false);
+
   // Phases
   const start = useScene((state) => state.start);
   const restart = useScene((state) => state.restart);
@@ -77,22 +82,6 @@ export default function CharacterMov() {
   const jump = () => {
     // Simple jump every 0.55 seconds
     body.current.applyImpulse({ x: 0, y: 2.5, z: 0 });
-
-    /**
-     * Would of used this raycaster if origin of character was not unknown and loaded mesh
-     * objects were not hollow due to missing faces of face orientation from import.
-     */
-    // const origin = body.current.translation();
-    // origin.y += 0.005;
-    // const direction = { x: 0, y: -1, z: 0 };
-
-    // const ray = new rapier.Ray(origin, direction);
-    // const hit = rapierWorld.castRay(ray, 10, true);
-    // console.log(hit.toi);
-
-    // if (hit.toi < 0.1) {
-    //   body.current.applyImpulse({ x: 0, y: 2.5, z: 0 });
-    // }
   };
 
   const reset = () => {
@@ -208,6 +197,9 @@ export default function CharacterMov() {
           setAnimationName("Idle");
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -242,6 +234,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -276,6 +271,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -291,6 +289,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -327,6 +328,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -363,6 +367,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -401,6 +408,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -439,6 +449,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -477,6 +490,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -515,6 +531,9 @@ export default function CharacterMov() {
 
           // Update cameraSpeed on move.
           setCameraSpeed(10);
+
+          // Deactivate interaction when moving
+          setInteractionActive(false);
         }
         break;
 
@@ -535,7 +554,7 @@ export default function CharacterMov() {
     /**
      * Camera
      */
-    if (!controls.orbitActive) {
+    if (!controls.orbitActive && !interactionActive) {
       // Update camera
       const cameraRotation = THREE.MathUtils.lerp(
         rotationAngle,
@@ -587,6 +606,15 @@ export default function CharacterMov() {
           </group>
         </RigidBody>
       </group>
+
+      {/* Adding optional chaining to prevent accessing properties of undefined */}
+      <PopUpHandler
+        positionLeft={nodes.backEndBaked?.position}
+        bodyPosition={body.current?.translation()}
+        cameraPosition={smoothedCameraPosition}
+        cameraTarget={smoothedCameraTarget}
+        setInteractionActive={setInteractionActive}
+      />
     </>
   );
 }

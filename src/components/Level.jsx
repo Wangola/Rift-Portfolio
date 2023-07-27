@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { useTexture, useGLTF, Float } from "@react-three/drei";
+import { useTexture, Float } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import { RigidBody } from "@react-three/rapier";
 
@@ -440,16 +440,7 @@ function BowlsLoad({ nodes, nodeNames, controls }) {
   );
 }
 
-export default function Level() {
-  /**
-   * Loading Process
-   */
-  // Destructure model load
-  const { nodes } = useGLTF("./model/baked.glb");
-
-  // Initializing Control Function (Any leva value needed will begin with controls.)
-  const controls = DebugControls();
-
+export default function Level({ nodes, controls }) {
   // Loads textures
   const bakedTexture = useTexture("./model/baked.jpg");
   bakedTexture.flipY = false;

@@ -23,6 +23,7 @@ root.render(
         { name: "rightward", keys: ["ArrowRight", "KeyD"] },
         { name: "shift", keys: ["Shift"] },
         { name: "jump", keys: ["Space"] },
+        { name: "interact", keys: ["KeyE"] },
       ]}
     >
       <Experience />

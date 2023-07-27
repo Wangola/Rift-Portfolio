@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { OrbitControls, useGLTF, useTexture } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Physics, Debug } from "@react-three/rapier";
 
 // Custom imports
@@ -11,9 +11,16 @@ import LoadingScreen from "./components/LoadingScreen";
 import { Canvas } from "@react-three/fiber";
 
 export default function Experience() {
-  const controls = DebugControls();
-
   const [start, setStart] = useState(false);
+
+  /**
+   * Loading Process (for some reason attempting to bring over the useTexture cause R3F hook errors)
+   */
+  // Destructure model load
+  const { nodes } = useGLTF("./model/baked.glb");
+
+  // Initializing Control Function (Any leva value needed will begin with controls.)
+  const controls = DebugControls();
 
   return (
     <>
@@ -27,9 +34,13 @@ export default function Experience() {
               <Physics>
                 {/* With latets version of rapier */}
                 {controls.physicsVisible ? <Debug /> : null}
+
                 <Lights />
-                <Level />
-                <CharacterMov />
+                <Level nodes={nodes} controls={controls} />
+
+                {/* Pasing nodes to CharacterMov which calls PopUpHandler needs static 
+                positions of Panels */}
+                <CharacterMov nodes={nodes} />
               </Physics>
             </>
           )}

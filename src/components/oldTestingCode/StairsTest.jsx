@@ -144,3 +144,19 @@ export default function StairsTest() {
 //       }
 //     );
 //   }, []);
+
+/**
+ * Would of used this raycaster if origin of character was not unknown and loaded mesh
+ * objects were not hollow due to missing faces of face orientation from import.
+ */
+// const origin = body.current.translation();
+// origin.y += 0.005;
+// const direction = { x: 0, y: -1, z: 0 };
+
+// const ray = new rapier.Ray(origin, direction);
+// const hit = rapierWorld.castRay(ray, 10, true);
+// console.log(hit.toi);
+
+// if (hit.toi < 0.1) {
+//   body.current.applyImpulse({ x: 0, y: 2.5, z: 0 });
+// }
