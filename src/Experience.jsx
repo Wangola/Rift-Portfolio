@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Physics, Debug } from "@react-three/rapier";
 
@@ -11,7 +11,24 @@ import LoadingScreen from "./components/LoadingScreen";
 import { Canvas } from "@react-three/fiber";
 
 export default function Experience() {
+  // State for once spawn button is selected
   const [start, setStart] = useState(false);
+
+  // Function to play the audio
+  const playAudio = () => {
+    // Trickling Up - Godmode || Somnia II - Reed Mathis
+    const audio = new Audio("./audios/Trickling Up - Godmode.mp3");
+    audio.loop = true;
+    audio.volume = 0.15;
+    audio.play();
+  };
+
+  // Play audio
+  useEffect(() => {
+    if (start) {
+      playAudio();
+    }
+  }, [start]);
 
   /**
    * Loading Process (for some reason attempting to bring over the useTexture cause R3F hook errors)
