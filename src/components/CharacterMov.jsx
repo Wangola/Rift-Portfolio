@@ -8,7 +8,7 @@ import { RigidBody } from "@react-three/rapier";
 import DebugControls from "./DebugControls";
 import Character from "./CharacterLoad";
 import useScene from "../stores/useScene";
-import PopUpHandler from "./PopUpHandler";
+import InteractionHandler from "./InteractionHandler";
 
 /**
  * Calculate the target rotation for the body based on the camera and character position.
@@ -608,8 +608,8 @@ export default function CharacterMov({ nodes }) {
       </group>
 
       {/* Adding optional chaining to prevent accessing properties of undefined */}
-      <PopUpHandler
-        positionLeft={nodes.backEndBaked?.position}
+      <InteractionHandler
+        nodes={nodes}
         bodyPosition={body.current?.translation()}
         cameraPosition={smoothedCameraPosition}
         cameraTarget={smoothedCameraTarget}

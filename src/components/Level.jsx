@@ -110,20 +110,7 @@ function PanelsLoad({ nodes, bakedExtra }) {
         </mesh>
       </Float>
 
-      {/* contactBaked */}
-      <Float speed={3.2} rotationIntensity={0.15}>
-        <mesh
-          geometry={nodes.contactBaked.geometry}
-          position={nodes.contactBaked.position}
-        >
-          <meshBasicMaterial map={bakedExtra} />
-        </mesh>
-        {/* Name load */}
-        <mesh
-          geometry={nodes.name.geometry}
-          position={nodes.name.position}
-        ></mesh>
-      </Float>
+      {/* Contact panel is loaded in PopUpHandler called in CharacterMov.jsx (had to have panel float animation match social media boxes) */}
     </>
   );
 }
