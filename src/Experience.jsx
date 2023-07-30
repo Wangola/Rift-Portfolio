@@ -3,6 +3,7 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Physics, Debug } from "@react-three/rapier";
 import { Canvas } from "@react-three/fiber";
 import { Leva } from "leva";
+import { Perf } from "r3f-perf";
 
 // Custom imports
 import Level from "./components/Level";
