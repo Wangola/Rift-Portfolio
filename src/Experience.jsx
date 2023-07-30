@@ -43,8 +43,7 @@ export default function Experience() {
   return (
     <>
       {/* Conditionally render Leva only when needed */}
-      {/* {window.location.hash === "#debug" && <Leva collapsed />} */}
-      <Leva collapsed />
+      <Leva collapsed hidden={window.location.hash !== "#debug"} />
 
       <Canvas camera={{ fov: 75 }}>
         <Suspense fallback={null}>
