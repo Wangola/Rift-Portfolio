@@ -36,6 +36,18 @@ body {
   pointer-events: none;
 }
 
+/*
+  Mobile Disclaimer
+*/
+.mobile-disclaimer {
+  margin-bottom: 40px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 3px groove #ccc;
+  text-align: center;
+  font-family: "Bebas Neue", sans-serif;
+}
+
 /* 
   Intro text 
 */

@@ -28,11 +28,41 @@ export default function LoadingScreen({ started, onStarted }) {
     onStarted(); // Call the onStarted prop to transition to the rest of the experience
   };
 
+  /**
+   * Handle screens smaller then 768px or tablet sizes
+   */
+  // State to track if the screen size is smaller than 768px
+  const [isTabletSize, setIsTabletSize] = useState(false);
+
+  // Function to check the screen size and update the state accordingly
+  const handleResize = () => {
+    setIsTabletSize(window.innerWidth <= 768);
+  };
+
+  // Add an event listener to handle screen resize
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call the function initially to set the initial state
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
       <div
         className={`loadingScreen ${started ? "loadingScreen-started" : ""}`}
       >
+        {/* Conditionally render the disclaimer div for tablet-sized screens */}
+        {isTabletSize && (
+          <div className="mobile-disclaimer">
+            Website is under development and currently only supports PC's or
+            laptops keyboard movements.
+          </div>
+        )}
+
         {/* "Welcome to my Portfolio" text (if completed hide) else stay*/}
         <div className={`intro-text ${introCompleted ? "hidden" : ""}`}>
           Welcome to my Portfolio!
