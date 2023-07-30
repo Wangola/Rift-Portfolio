@@ -5,7 +5,6 @@ import * as THREE from "three";
 import { RigidBody } from "@react-three/rapier";
 
 // Custom import
-import DebugControls from "./DebugControls";
 import Character from "./CharacterLoad";
 import useScene from "../stores/useScene";
 import InteractionHandler from "./InteractionHandler";
@@ -54,9 +53,8 @@ function smoothRotation(currentRotation, targetRotation, rotationSpeed, delta) {
   return currentRotation + rotationDifference * rotationSpeed * delta;
 }
 
-export default function CharacterMov({ nodes }) {
+export default function CharacterMov({ nodes, controls }) {
   // Ref
-  const controls = new DebugControls();
   const body = useRef();
   const character = useRef();
 

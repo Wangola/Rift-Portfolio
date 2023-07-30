@@ -1,6 +1,8 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Physics, Debug } from "@react-three/rapier";
+import { Canvas } from "@react-three/fiber";
+import { Leva } from "leva";
 
 // Custom imports
 import Level from "./components/Level";
@@ -8,7 +10,6 @@ import Lights from "./components/Lights";
 import DebugControls from "./components/DebugControls";
 import CharacterMov from "./components/CharacterMov";
 import LoadingScreen from "./components/LoadingScreen";
-import { Canvas } from "@react-three/fiber";
 
 export default function Experience() {
   // State for once spawn button is selected
@@ -41,23 +42,30 @@ export default function Experience() {
 
   return (
     <>
+      {/* Conditionally render Leva only when needed */}
+      {/* {window.location.hash === "#debug" && <Leva collapsed />} */}
+      <Leva collapsed />
+
       <Canvas camera={{ fov: 75 }}>
         <Suspense fallback={null}>
           {start && (
             <>
               {controls.orbitActive ? <OrbitControls makeDefault /> : null}
 
+              {/* Inject perf */}
+              {controls.perfVisible ? <Perf position="top-left" /> : null}
+
               {/* Old ver needed debug={controls.physicsVisible} */}
               <Physics>
                 {/* With latets version of rapier */}
                 {controls.physicsVisible ? <Debug /> : null}
 
-                <Lights />
+                <Lights controls={controls} />
                 <Level nodes={nodes} controls={controls} />
 
                 {/* Pasing nodes to CharacterMov which calls PopUpHandler needs static 
                 positions of Panels */}
-                <CharacterMov nodes={nodes} />
+                <CharacterMov nodes={nodes} controls={controls} />
               </Physics>
             </>
           )}

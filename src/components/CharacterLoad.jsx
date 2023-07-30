@@ -1,6 +1,5 @@
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { useEffect } from "react";
-import { useControls } from "leva";
 
 export default function Character({ animationName }) {
   const character = useGLTF("./model/character.glb");

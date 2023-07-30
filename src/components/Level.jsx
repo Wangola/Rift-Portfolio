@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import { useTexture, Float } from "@react-three/drei";
-import { Perf } from "r3f-perf";
 import { RigidBody } from "@react-three/rapier";
 
 // Shader support imports
@@ -19,8 +18,6 @@ import {
   CandleMaterial,
   BowlMaterial,
 } from "./Shaders";
-
-import DebugControls from "./DebugControls";
 
 /**
  * Extend is needed for material usage (Shaders.jsx utilizes shaderMaterial)
@@ -454,9 +451,6 @@ export default function Level({ nodes, controls }) {
   return (
     <>
       <color args={[controls.backgroundColor]} attach={"background"} />
-
-      {/* Inject perf */}
-      {controls.perfVisible ? <Perf position="top-left" /> : null}
 
       {/* Could have the type be "kinematicPosition" for just a square shell */}
       <RigidBody type="fixed" colliders="trimesh" friction={0}>

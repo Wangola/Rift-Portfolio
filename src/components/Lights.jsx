@@ -2,18 +2,13 @@ import { useRef } from "react";
 import { useHelper, Sky } from "@react-three/drei";
 import * as THREE from "three";
 
-// Custom Imports
-import DebugControls from "./DebugControls";
-
-export default function Lights() {
+export default function Lights({ controls }) {
   // Helpers (Uncomment useHelpers if you want to see directionalLights)
   const directionalLightBehind = useRef();
   // useHelper(directionalLightBehind, THREE.DirectionalLightHelper, 5);
 
   const directionalLightFront = useRef();
   // useHelper(directionalLightFront, THREE.DirectionalLightHelper, 5);
-
-  const controls = new DebugControls();
 
   return (
     <>
