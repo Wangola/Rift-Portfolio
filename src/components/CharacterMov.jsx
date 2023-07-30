@@ -169,6 +169,15 @@ export default function CharacterMov({ nodes, controls }) {
     const { forward, backward, leftward, rightward, shift } = getKeys();
 
     /**
+     * Frame rate independency (not used but for later updates [Currently causes movement issues for later updates])
+     */
+    // const indDelta = 1.0 - Math.pow(0.001, delta);
+
+    // See the difference betwen corrected or now
+    // console.log("This is delta: ", delta);
+    // console.log("This is other coefficient: ", indDelta);
+
+    /**
      * Speed
      */
     const speed = shift ? 9.5 : 7; // Adjust the speed based on whether shift is pressed or not
