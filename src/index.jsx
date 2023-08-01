@@ -1,8 +1,7 @@
-import React from "react";
+import React, { StrictMode } from "react";
 import "./style.css";
 import { createRoot } from "react-dom/client";
-import { KeyboardControls, Loader } from "@react-three/drei";
-import { StrictMode } from "react";
+import { KeyboardControls } from "@react-three/drei";
 
 // Custom imports
 import Experience from "./Experience";

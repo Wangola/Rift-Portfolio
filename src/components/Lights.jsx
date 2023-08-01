@@ -1,4 +1,6 @@
 import { useRef } from "react";
+
+// For helpers
 import { useHelper, Sky } from "@react-three/drei";
 import * as THREE from "three";
 
