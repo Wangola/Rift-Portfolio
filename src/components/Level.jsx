@@ -112,6 +112,42 @@ function PanelsLoad({ nodes, bakedExtra }) {
   );
 }
 
+function MiscLoad({ nodes, bakedMisc }) {
+  return (
+    <>
+      {/* Misc left */}
+      <mesh
+        geometry={nodes.miscLeftBaked.geometry}
+        position={nodes.miscLeftBaked.position}
+      >
+        <meshBasicMaterial map={bakedMisc} />
+      </mesh>
+
+      {/* Misc right */}
+      <mesh
+        geometry={nodes.miscRightBaked.geometry}
+        position={nodes.miscRightBaked.position}
+      >
+        <meshBasicMaterial map={bakedMisc} />
+      </mesh>
+    </>
+  );
+}
+
+function GrassLoad({ nodes, bakedFloor }) {
+  return (
+    <>
+      {/* Grass load */}
+      <mesh
+        geometry={nodes.floorGrassBaked.geometry}
+        position={nodes.floorGrassBaked.position}
+      >
+        <meshBasicMaterial map={bakedFloor} />
+      </mesh>
+    </>
+  );
+}
+
 function NexusCrystalLoad({ nodes, controls }) {
   /**
    * Animation Info
@@ -426,12 +462,17 @@ function BowlsLoad({ nodes, nodeNames, controls }) {
 
 export default function Level({ nodes, controls }) {
   // Loads textures
-  const bakedTexture = useTexture("./model/baked.jpg");
+  const bakedTexture = useTexture("./model/bakedArea.jpg");
   bakedTexture.flipY = false;
+
   const bakedFloor = useTexture("./model/bakedFloor.jpg");
   bakedFloor.flipY = false;
+
   const bakedExtra = useTexture("./model/bakedExtra.jpg");
   bakedExtra.flipY = false;
+
+  const bakedMisc = useTexture("./model/bakedMiscItems.jpg");
+  bakedMisc.flipY = false;
 
   /**
    * Node Extraction
@@ -461,8 +502,12 @@ export default function Level({ nodes, controls }) {
           bakedFloor={bakedFloor}
         />
 
+        <MiscLoad nodes={nodes} bakedMisc={bakedMisc} />
+
         <PanelsLoad nodes={nodes} bakedExtra={bakedExtra} />
       </RigidBody>
+
+      <GrassLoad nodes={nodes} bakedFloor={bakedFloor} />
 
       <NexusCrystalLoad nodes={nodes} controls={controls} />
 

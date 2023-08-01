@@ -21,7 +21,7 @@ export default function Experience() {
     // Trickling Up - Godmode || Somnia II - Reed Mathis
     const audio = new Audio("./audios/Trickling Up - Godmode.mp3");
     audio.loop = true;
-    audio.volume = 0.15;
+    audio.volume = 0.6;
     audio.play();
   };
 
@@ -36,7 +36,7 @@ export default function Experience() {
    * Loading Process (for some reason attempting to bring over the useTexture cause R3F hook errors)
    */
   // Destructure model load
-  const { nodes } = useGLTF("./model/baked.glb");
+  const { nodes } = useGLTF("./model/bakedRift.glb");
 
   // Initializing Control Function (Any leva value needed will begin with controls.)
   const controls = DebugControls();
