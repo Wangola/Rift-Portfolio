@@ -2,20 +2,20 @@ import * as THREE from "three";
 import { shaderMaterial } from "@react-three/drei";
 
 // Import your shader code
-import nexusVertexShader from "../shaders/nexus/vertex.glsl";
-import nexusFragmentShader from "../shaders/nexus/fragment.glsl";
-import portalVertexShader from "../shaders/portal/vertex.glsl";
-import portalFragmentShader from "../shaders/portal/fragment.glsl";
-import candleVertexShader from "../shaders/candleFire/vertex.glsl";
-import candleFragmentShader from "../shaders/candleFire/fragment.glsl";
-import crystalVertexShader from "../shaders/crystalBall/vertex.glsl";
-import crystalFragmentShader from "../shaders/crystalBall/fragment.glsl";
-import staffVertexShader from "../shaders/staffGem/vertex.glsl";
-import staffFragmentShader from "../shaders/staffGem/fragment.glsl";
-import bowlVertexShader from "../shaders/fireBowl/vertex.glsl";
-import bowlFragmentShader from "../shaders/fireBowl/fragment.glsl";
-import backgroundVertexShader from "../shaders/backgroundShader/vertex.glsl";
-import backgroundFragmentShader from "../shaders/backgroundShader/fragment.glsl";
+import nexusVertexShader from "./shaders/nexus/vertex.glsl";
+import nexusFragmentShader from "./shaders/nexus/fragment.glsl";
+import portalVertexShader from "./shaders/portal/vertex.glsl";
+import portalFragmentShader from "./shaders/portal/fragment.glsl";
+import candleVertexShader from "./shaders/candleFire/vertex.glsl";
+import candleFragmentShader from "./shaders/candleFire/fragment.glsl";
+import crystalVertexShader from "./shaders/crystalBall/vertex.glsl";
+import crystalFragmentShader from "./shaders/crystalBall/fragment.glsl";
+import staffVertexShader from "./shaders/staffGem/vertex.glsl";
+import staffFragmentShader from "./shaders/staffGem/fragment.glsl";
+import bowlVertexShader from "./shaders/fireBowl/vertex.glsl";
+import bowlFragmentShader from "./shaders/fireBowl/fragment.glsl";
+import backgroundVertexShader from "./shaders/backgroundShader/vertex.glsl";
+import backgroundFragmentShader from "./shaders/backgroundShader/fragment.glsl";
 
 // Custom Shaders
 const NexusMaterial = shaderMaterial(
