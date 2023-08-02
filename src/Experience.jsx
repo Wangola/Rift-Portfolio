@@ -12,16 +12,18 @@ import DebugControls from "./components/DebugControls";
 import CharacterMov from "./components/CharacterMov";
 import LoadingScreen from "./components/LoadingScreen";
 
+// Trickling Up - Godmode || Somnia II - Reed Mathis
+import Song from "../public/sounds/Trickling Up - Godmode.mp3";
+
 export default function Experience() {
   // State for once spawn button is selected
   const [start, setStart] = useState(false);
 
   // Function to play the audio
   const playAudio = () => {
-    // Trickling Up - Godmode || Somnia II - Reed Mathis
-    const audio = new Audio("./components/audios/Trickling Up - Godmode.mp3");
+    const audio = new Audio(Song);
     audio.loop = true;
-    audio.volume = 0.6;
+    audio.volume = 0.45;
     audio.play();
   };
 
