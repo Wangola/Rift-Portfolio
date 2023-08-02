@@ -19,7 +19,7 @@ export default function Experience() {
   // Function to play the audio
   const playAudio = () => {
     // Trickling Up - Godmode || Somnia II - Reed Mathis
-    const audio = new Audio("./audios/Trickling Up - Godmode.mp3");
+    const audio = new Audio("./components/audios/Trickling Up - Godmode.mp3");
     audio.loop = true;
     audio.volume = 0.6;
     audio.play();
