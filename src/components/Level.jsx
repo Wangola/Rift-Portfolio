@@ -461,16 +461,22 @@ function BowlsLoad({ nodes, nodeNames, controls }) {
 }
 
 export default function Level({ nodes, controls }) {
-  // Loads textures
+  /**
+   * Load Textures
+   */
+  // Area
   const bakedTexture = useTexture("./model/bakedArea.jpg");
   bakedTexture.flipY = false;
 
+  // Floor
   const bakedFloor = useTexture("./model/bakedFloor.jpg");
   bakedFloor.flipY = false;
 
+  // Panels
   const bakedExtra = useTexture("./model/bakedExtra.jpg");
   bakedExtra.flipY = false;
 
+  // Items / Signs
   const bakedMisc = useTexture("./model/bakedMiscItems.jpg");
   bakedMisc.flipY = false;
 
