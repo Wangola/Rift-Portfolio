@@ -38,6 +38,8 @@ I would like to express my gratitude to the amazing Three.js Journey discord com
 
 If you're interested in creating 3D experiences like this, I highly recommend checking out the Three.js Journey course to kickstart your learning and exploration.
 
+[Three.js Journey](https://threejs-journey.com/)
+
 ## History
 
 - Version 1 (POC) - Completed [August 4th, 2023]
