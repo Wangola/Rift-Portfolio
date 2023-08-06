@@ -134,13 +134,13 @@ function MiscLoad({ nodes, bakedMisc }) {
   );
 }
 
-function GrassLoad({ nodes, bakedFloor }) {
+function LandscapeLoad({ nodes, bakedFloor }) {
   return (
     <>
-      {/* Grass load */}
+      {/* Landscape load */}
       <mesh
-        geometry={nodes.floorGrassBaked.geometry}
-        position={nodes.floorGrassBaked.position}
+        geometry={nodes.floorLandScape.geometry}
+        position={nodes.floorLandScape.position}
       >
         <meshBasicMaterial map={bakedFloor} />
       </mesh>
@@ -513,7 +513,7 @@ export default function Level({ nodes, controls }) {
         <PanelsLoad nodes={nodes} bakedExtra={bakedExtra} />
       </RigidBody>
 
-      <GrassLoad nodes={nodes} bakedFloor={bakedFloor} />
+      <LandscapeLoad nodes={nodes} bakedFloor={bakedFloor} />
 
       <NexusCrystalLoad nodes={nodes} controls={controls} />
 
