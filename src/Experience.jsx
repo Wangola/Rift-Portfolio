@@ -11,6 +11,7 @@ import Lights from "./components/Lights";
 import DebugControls from "./components/DebugControls";
 import CharacterMov from "./components/CharacterMov";
 import LoadingScreen from "./components/LoadingScreen";
+import Temp from "./components/topArea/temp";
 
 // Trickling Up - Godmode || Somnia II - Reed Mathis
 import Song from "../public/sounds/Trickling Up - Godmode.mp3";
@@ -69,6 +70,8 @@ export default function Experience() {
                 positions of Panels */}
                 <CharacterMov nodes={nodes} controls={controls} />
               </Physics>
+
+              <Temp />
             </>
           )}
         </Suspense>
